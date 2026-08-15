@@ -1,0 +1,94 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Team Member
+model TeamMember {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      String   @default("member")
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Resource types
+enum ResourceType {
+  DOCUMENT
+  LINK
+  FILE
+  NOTE
+}
+
+// Resource
+model Resource {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  type        ResourceType @default(DOCUMENT)
+  url         String?
+  content     String?
+  tags        String[]
+  createdBy   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// Priority levels
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Status
+enum Status {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+}
+
+// Task status
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+// Deadline
+model Deadline {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  dueDate     DateTime
+  priority    Priority  @default(MEDIUM)
+  status      Status    @default(PENDING)
+  assignedTo  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Task
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  assigneeId  String?
+  assignee    TeamMember? @relation(fields: [assigneeId], references: [id])
+  deadlineId  String?
+  deadline    Deadline?  @relation(fields: [deadlineId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  completedAt DateTime?
+}
