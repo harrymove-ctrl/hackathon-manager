@@ -11,6 +11,7 @@ import deadlineRoutes from './routes/deadlineRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import teamRoutes from './routes/teamRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
+import pgbotRoutes from './routes/pgbotRoutes.js';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api/deadlines', deadlineRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/pgbot', pgbotRoutes);
 
 // Error handler
 app.use(errorHandler);

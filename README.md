@@ -18,6 +18,7 @@ Team hackathon manager with resources, deadlines, progress tracking, and pgbot P
 - **ORM**: Prisma
 - **Database**: PostgreSQL (Railway)
 - **Deployment**: Railway
+- **pgbot**: PostgreSQL observability (via CLI wrapper)
 
 ## Setup
 
@@ -69,6 +70,12 @@ npm run dev
 ### Progress
 - `GET /api/progress/summary` - Overall progress stats
 - `GET /api/progress/team/:memberId` - Individual team member progress
+
+### pgbot (Database Observability)
+- `GET /api/pgbot/inspect` - Database health inspection
+- `GET /api/pgbot/indexes` - Index analysis
+- `GET /api/pgbot/queries` - Query performance
+- `GET /api/pgbot/vacuum` - Vacuum health
 
 ### Health
 - `GET /health` - Health check

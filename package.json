@@ -14,8 +14,6 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@anthropic-ai/mcp-pgbot": "^1.0.0",
-    "@modelcontextprotocol/sdk": "^1.0.0",
     "@prisma/client": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
