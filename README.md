@@ -1,99 +1,220 @@
-# BNB Chain "Smart Money Era" Hackathon Manager
+# Hackathon Manager
 
-A terminal-style dashboard for tracking hackathon progress, deadlines, and team collaboration.
+A comprehensive hackathon management platform for tracking multiple hackathons, deadlines, team progress, resources, and news.
 
-## 🎯 Hackathon Info
+## 🎯 Concept
 
-| Field | Details |
-|-------|---------|
-| **Event** | The Smart Money Era: Build the Era |
-| **Dates** | 5 Aug - 9 Sep, 2026 |
-| **Prize Pool** | $30,000 USD + adoption |
-| **Category** | AI / BNB Agent Studio |
-| **Status** | 🚀 Ongoing |
+**Generic Hackathon Manager** - Works with ANY hackathon, not just BNB Chain:
+- Add any hackathon with custom tracks/prizes
+- Track multiple hackathons simultaneously  
+- News/announcements feed per hackathon
+- Team collaboration tools
+- Deadline countdown timers
+- Resource library
+- pgbot PostgreSQL observability
 
-## 🏆 Tracks
+## 📊 Features
 
-### Main Track: BNB Agent Studio Marketplace
-**Prize:** $30,000 + official adoption as BNB Agent Studio marketplace
+### Core Features
+- [x] **Projects** - Manage multiple hackathons
+- [x] **Resources** - Documents, links, files
+- [x] **Deadlines** - Priority-based tracking with countdowns
+- [x] **Tasks** - Assignment system for team members
+- [x] **Team** - Member management with progress tracking
+- [x] **Progress** - Real-time stats dashboard
+- [ ] **News/Announcements** - Hackathon news feed
+- [ ] **Frontend Dashboard** - Terminal-style UI
 
-**Required Agents:**
-1. Rebalancing (LP ranges, position resets)
-2. Grid Trading (automated grid orders)
-3. Yield Optimisation (liquidity routing)
-4. Health Factor Monitoring (liquidation protection)
+### Database Models
 
-### Partner Tracks
-- **Altana**: 50,000 Altana XP
-- **TermiX**: $6,000 / $3,000 / $1,000
-- **PancakeSwap**: 1,000 CAKE
+```
+Project
+├── name, description, url
+├── startDate, endDate
+├── status (ACTIVE, ARCHIVED)
+├── tracks[] (name, prize, description)
+├── news[] (title, content, publishedAt)
+├── resources[]
+├── deadlines[]
+├── tasks[]
+└── teamMembers[]
 
-## 🔗 Key Resources
+News (NEW)
+├── projectId
+├── title
+├── content (markdown)
+├── url (optional link)
+├── priority (LOW, MEDIUM, HIGH)
+├── publishedAt
+└── isRead (boolean)
 
-- [BNB Agent Studio](https://www.bnbchain.org/en/bnb-agent-studio)
-- [Altana Docs & SDK](https://docs.altana.network/)
-- [BSC Testnet Faucet](https://testnet.bnbchain.org/faucet-smart)
-- [TermiX BSC MCP](https://github.com/TermiX-official/bsc-mcp)
-- [PancakeSwap Developer Portal](https://developer.pancakeswap.finance/)
+Resource
+├── projectId
+├── title, description
+├── type (DOCUMENT, LINK, FILE, NOTE)
+├── url
+├── tags[]
+└── createdBy
 
-## 💻 Tech Stack
+Deadline
+├── projectId
+├── title, description
+├── dueDate
+├── priority (LOW, MEDIUM, HIGH, CRITICAL)
+├── status (PENDING, IN_PROGRESS, COMPLETED, OVERDUE)
+└── assignedTo
 
-- **Backend**: Node.js + Express + TypeScript
-- **Database**: PostgreSQL (Railway)
-- **ORM**: Prisma
-- **Observability**: pgbot for PostgreSQL health
-- **Frontend**: Terminal-style dashboard (planned)
+Task
+├── projectId
+├── title, description
+├── status (TODO, IN_PROGRESS, DONE)
+├── priority (LOW, MEDIUM, HIGH, CRITICAL)
+├── assigneeId → TeamMember
+└── deadlineId → Deadline
 
-## 🚀 API Endpoints
+TeamMember
+├── projectId
+├── name, email, role
+└── tasks[]
+```
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/resources` | List hackathon resources |
-| `GET /api/deadlines` | Track deadlines |
-| `GET /api/tasks` | Task board |
-| `GET /api/team` | Team members |
-| `GET /api/progress/summary` | Overall progress |
-| `GET /api/pgbot/inspect` | Database health |
-| `GET /health` | Server health |
+## 🎨 Design
 
-## 📦 Project Status
+### Terminal Aesthetic (term-v0 inspired)
+- Dark theme: `#0a0a0f` background
+- Accent colors: Cyan `#00d4ff`, Green `#00ff88`, Yellow `#ffcc00`
+- Fonts: JetBrains Mono / Fira Code
+- ASCII-art borders and decorations
 
-### Completed ✅
-- [x] Backend API setup
-- [x] PostgreSQL database
-- [x] Railway deployment
-- [x] Basic CRUD endpoints
+### Dashboard Layout
+```
+┌─────────────────────────────────────────────────────────────┐
+│  🚀 HACKATHON MANAGER           [Multiple Hackathons]       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─ HACKATHONS ──┐  ┌─ NEWS FEED ─────────────────────┐ │
+│  │ ● BNB Chain   │  │ 📢 TermiX announces $10K prize   │ │
+│  │ ○ ETH Global  │  │ 📢 Submissions open!            │ │
+│  │ ○ ETH Denver   │  │ 📢 New workshop added          │ │
+│  └───────────────┘  └───────────────────────────────────┘ │
+│                                                             │
+│  ┌─ DEADLINES ──────────────┐  ┌─ TEAM PROGRESS ───────┐ │
+│  │ 🔴 23d 14h Submission   │  │ alice   ████████░░ 80%  │ │
+│  │ 🟡 2d 6h Team Review   │  │ bob     ██████░░░░ 60%  │ │
+│  │ 🟢 5d Documentation    │  │ carol   ████░░░░░░ 40%  │ │
+│  └────────────────────────┘  └─────────────────────────┘ │
+│                                                             │
+│  ┌─ TASKS ──────────────────────────────────────────────┐   │
+│  │ [✓] Design Agent Architecture        alice     DONE   │   │
+│  │ [●] Implement Rebalancing Agent      alice    65%   │   │
+│  │ [○] Grid Trading Agent              bob       TODO  │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│  🟢 DB: Connected  •  Tables: 12  •  Cache: 99.8%       │
+└─────────────────────────────────────────────────────────────┘
+```
 
-### In Progress 🔄
-- [ ] Frontend dashboard UI/UX
-- [ ] Terminal-style design (term-v0 inspired)
-- [ ] Real-time countdown timers
-- [ ] Team progress visualization
+## 🚀 Tech Stack
 
-## 🎨 Design Inspiration
+| Layer | Technology |
+|-------|------------|
+| Backend | Node.js + Express + TypeScript |
+| Database | PostgreSQL (Railway) |
+| ORM | Prisma |
+| Monitoring | pgbot |
+| Frontend | Terminal-style dashboard |
+| Deployment | Railway |
 
-Terminal/command-line aesthetic inspired by term-v0.app:
-- Dark theme (#0a0a0f background)
-- Monospace fonts (JetBrains Mono)
-- Cyan/green accent colors
-- ASCII-art inspired borders
+## 📡 API Endpoints
+
+### Projects
+- `GET /api/projects` - List all projects
+- `POST /api/projects` - Create project
+- `GET /api/projects/:id` - Get project
+- `PUT /api/projects/:id` - Update project
+- `DELETE /api/projects/:id` - Delete project
+
+### News (NEW)
+- `GET /api/projects/:id/news` - Get news feed
+- `POST /api/news` - Create news item
+- `PUT /api/news/:id` - Mark as read
+- `DELETE /api/news/:id` - Delete news
+
+### Resources
+- `GET /api/resources` - List resources
+- `POST /api/resources` - Create resource
+- `PUT /api/resources/:id` - Update
+- `DELETE /api/resources/:id` - Delete
+
+### Deadlines
+- `GET /api/deadlines` - List deadlines
+- `GET /api/deadlines/upcoming` - Next 10
+- `POST /api/deadlines` - Create
+- `PUT /api/deadlines/:id` - Update
+- `DELETE /api/deadlines/:id` - Delete
+
+### Tasks
+- `GET /api/tasks` - List tasks
+- `POST /api/tasks` - Create
+- `PUT /api/tasks/:id` - Update
+- `DELETE /api/tasks/:id` - Delete
+
+### Team
+- `GET /api/team` - List members
+- `POST /api/team` - Add member
+- `PUT /api/team/:id` - Update
+- `DELETE /api/team/:id` - Remove
+
+### Progress
+- `GET /api/progress/summary` - Overall stats
+
+### pgbot
+- `GET /api/pgbot/inspect` - DB health
+- `GET /api/pgbot/indexes` - Index analysis
+- `GET /api/pgbot/queries` - Query perf
+
+### Health
+- `GET /health` - Server health
 
 ## 🔗 Live URLs
 
 - **API**: https://api-production-83367.up.railway.app
 - **Dashboard**: Coming soon...
 
-## 📅 Timeline
+## 📅 Example Hackathons
 
-- **Now - 9 Sep 2026**: Build Phase
-- **TBD**: Shortlist Announcement
-- **TBD**: Winner Announcement
+### BNB Chain "Smart Money Era"
+| Field | Details |
+|-------|---------|
+| Dates | 5 Aug - 9 Sep 2026 |
+| Prize | $30,000 |
+| Category | AI / BNB Agent Studio |
 
-## 💬 Community
+### Future Hackathons
+- ETH Global (configurable)
+- ETH Denver
+- Any custom hackathon!
 
-- [Discord](https://discord.com/invite/bnbchain)
-- [Twitter](https://twitter.com/BNBChain)
-- [Telegram](https://t.me/bnbchain)
+## 💡 Roadmap
+
+### Phase 5: Frontend Dashboard
+- [ ] Terminal-style UI
+- [ ] News feed component
+- [ ] Multi-hackathon selector
+- [ ] Real-time countdowns
+
+### Phase 6: News & Announcements
+- [ ] News CRUD endpoints
+- [ ] News aggregation (RSS/JSON feeds)
+- [ ] Priority-based display
+- [ ] Read/unread tracking
+
+### Phase 7: Enhancements
+- [ ] Real-time updates (WebSocket/SSE)
+- [ ] Email notifications
+- [ ] Slack/Discord integration
+- [ ] Export to Notion/Linear
 
 ## License
 

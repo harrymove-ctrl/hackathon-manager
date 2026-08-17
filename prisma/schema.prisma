@@ -8,25 +8,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Project (Hackathon)
 enum ProjectStatus {
   ACTIVE
+  UPCOMING
   ARCHIVED
 }
 
 model Project {
-  id          String     @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String?
   url         String?
   startDate   DateTime?
-  endDate     DateTime?
-  status      ProjectStatus @default(ACTIVE)
-  tasks       Task[]
-  deadlines   Deadline[]
+  endDate    DateTime?
+  status      ProjectStatus @default(UPCOMING)
+  tracks      Track[]
+  news        News[]
   resources   Resource[]
+  deadlines   Deadline[]
+  tasks       Task[]
   teamMembers TeamMember[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+// Track (hackathon track/prize category)
+model Track {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  prize       String?
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// News/Announcements
+enum NewsPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model News {
+  id          String       @id @default(uuid())
+  title       String
+  content     String?
+  url         String?
+  priority    NewsPriority @default(MEDIUM)
+  isRead      Boolean      @default(false)
+  publishedAt DateTime     @default(now())
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 // Team Member
@@ -35,9 +72,9 @@ model TeamMember {
   name      String
   email     String   @unique
   role      String   @default("member")
-  tasks     Task[]
   projectId String?
-  project   Project? @relation(fields: [projectId], references: [id])
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  tasks     Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -61,7 +98,7 @@ model Resource {
   tags        String[]
   createdBy   String
   projectId   String?
-  project     Project?     @relation(fields: [projectId], references: [id])
+  project     Project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -98,9 +135,9 @@ model Deadline {
   priority    Priority  @default(MEDIUM)
   status      Status    @default(PENDING)
   assignedTo  String?
-  tasks       Task[]
   projectId   String?
-  project     Project?  @relation(fields: [projectId], references: [id])
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  tasks       Task[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -112,12 +149,13 @@ model Task {
   description String?
   status      TaskStatus @default(TODO)
   priority    Priority   @default(MEDIUM)
+  progress    Int        @default(0)  // 0-100 percentage
   assigneeId  String?
-  assignee    TeamMember? @relation(fields: [assigneeId], references: [id])
+  assignee    TeamMember? @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
   deadlineId  String?
-  deadline    Deadline?  @relation(fields: [deadlineId], references: [id])
+  deadline    Deadline?  @relation(fields: [deadlineId], references: [id], onDelete: SetNull)
   projectId   String?
-  project     Project?   @relation(fields: [projectId], references: [id])
+  project     Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   completedAt DateTime?
