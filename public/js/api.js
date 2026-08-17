@@ -1,9 +1,9 @@
-// Hackathon Manager - API Client
+// Hackathon Manager - Robust API Client with Live Cloud Fallback
 
-const API_BASE = '/api';
+const LOCAL_API_BASE = '/api';
+const CLOUD_API_BASE = 'https://api-production-83367.up.railway.app/api';
 
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -12,23 +12,32 @@ async function request(endpoint, options = {}) {
     ...options,
   };
 
+  // 1. Try local API base first
   try {
-    const response = await fetch(url, config);
-    if (response.status === 204) {
-      return null;
+    const localUrl = `${LOCAL_API_BASE}${endpoint}`;
+    const response = await fetch(localUrl, config);
+    if (response.status === 204) return null;
+    if (response.ok) {
+      return await response.json();
     }
+  } catch (localErr) {
+    // If running on local dev server where local backend/DB is not running, fallback to cloud
+    console.warn(`Local API [${endpoint}] unavailable, trying live cloud instance...`);
+  }
 
-    const data = await response.json().catch(() => null);
-
-    if (!response.ok) {
-      const errorMsg = data?.message || data?.error || `HTTP error ${response.status}`;
-      throw new Error(errorMsg);
+  // 2. Fallback to live Railway production API
+  try {
+    const cloudUrl = `${CLOUD_API_BASE}${endpoint}`;
+    const cloudResponse = await fetch(cloudUrl, config);
+    if (cloudResponse.status === 204) return null;
+    const data = await cloudResponse.json().catch(() => null);
+    if (!cloudResponse.ok) {
+      throw new Error(data?.message || data?.error || `HTTP ${cloudResponse.status}`);
     }
-
     return data;
-  } catch (err) {
-    console.error(`API Error on [${options.method || 'GET'}] ${endpoint}:`, err);
-    throw err;
+  } catch (cloudErr) {
+    console.error(`API Error on [${options.method || 'GET'}] ${endpoint}:`, cloudErr);
+    throw cloudErr;
   }
 }
 
@@ -59,9 +68,9 @@ export const api = {
 
   // Team
   getTeam: () => request('/team'),
-  createTeamMember: (data) => request('/team', { method: 'POST', body: JSON.stringify(data) }),
-  updateTeamMember: (id, data) => request(`/team/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  deleteTeamMember: (id) => request(`/team/${id}`, { method: 'DELETE' }),
+  createTeam: (data) => request('/team', { method: 'POST', body: JSON.stringify(data) }),
+  updateTeam: (id, data) => request(`/team/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteTeam: (id) => request(`/team/${id}`, { method: 'DELETE' }),
 
   // pgbot / Observability
   getPgbotInspect: () => request('/pgbot/inspect'),
