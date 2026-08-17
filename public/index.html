@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BNB Chain Hackathon // The Smart Money Era & Neo Flex Labs</title>
-  <meta name="description" content="BNB Chain Smart Money Era hackathon management, AI agent marketplace tracks, TermiX Agent Advantage Report, Altana session keys, pgbot PostgreSQL observability, and Neo Flexbox Labs visual playground.">
+  <meta name="description" content="BNB Chain Smart Money Era hackathon command, multi-track project ideas, TermiX Agent Advantage Report, Altana session keys, pgbot PostgreSQL observability, and Neo Flexbox Labs visual playground.">
   
   <!-- Preconnect and Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,7 @@
           <path d="m9 8 4 4-4 4"></path>
           <path d="M15 16h2"></path>
         </svg>
-        <span class="tui-brand-tag">BNB AGENT STUDIO</span>
+        <span class="tui-brand-tag">SMART MONEY ERA</span>
       </a>
     </div>
 
@@ -52,9 +52,9 @@
       <span class="tui-nav-punct">::</span>
     </div>
 
-    <!-- Top Right Actions -->
+    <!-- Top Right Actions (Amber / Slate toggle) -->
     <div class="tui-nav-right">
-      <button class="btn-term btn-term-sm" id="btn-cycle-theme" title="Cycle Themes (Amber, Green, Cyan, Slate)">
+      <button class="btn-term btn-term-sm" id="btn-cycle-theme" title="Toggle Theme (Amber / Slate)">
         <span id="theme-name-display">AMBER</span>
       </button>
       <button class="btn-term btn-term-sm" id="btn-toggle-crt" title="Toggle CRT scanline raster">
@@ -98,7 +98,7 @@
 
       <!-- Quick Command Installer Bar -->
       <div class="term-install-box">
-        <div class="term-install-code" id="install-snippet">npx bnb-agent-studio init --track smart-money-era</div>
+        <div class="term-install-code" id="install-snippet">npx bnb-hackathon init --track smart-money-era</div>
         <div class="term-install-actions">
           <button class="btn-term btn-term-sm" id="btn-copy-install" title="Copy to clipboard">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
@@ -191,7 +191,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 2: TRACKS & BOUNTIES (/tracks)
+         VIEW 2: TRACKS & BOUNTIES & PROJECT IDEAS (/tracks)
          ==================================================================== -->
     <section class="tui-view" id="tab-tracks">
       <!-- Main Track Header Banner -->
@@ -199,66 +199,141 @@
         <div class="track-banner-header">
           <div style="display:flex; align-items:center; gap:0.6rem;">
             <span class="track-badge-gold">$30,000 USD MAIN TRACK</span>
-            <h2 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--tui-text-highlight);">Build the BNB Agent Studio Marketplace</h2>
+            <h2 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--tui-text-highlight);">Build the Era: Smart Money & AI Agents</h2>
           </div>
           <a href="https://www.bnbchain.org/en/hackathons/smart-money-era?tab=tracks" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary">
-            PORTAL SPECS ↗
+            OFFICIAL PORTAL ↗
           </a>
         </div>
         <p style="font-size:0.85rem; color:var(--tui-text-primary); line-height:1.6;">
-          The canonical front door for every agent on BSC. Submissions MUST have equal depth across all 4 core categories. Focus on seamless discovery, 1-click execution, transparent strategy telemetry, and on-chain trust metrics.
+          Explore a universe of high-impact hackathon project ideas across AI Agents, Autonomous DeFi, High-Frequency Trading Bots, Liquidations Defense, Sovereign Smart Accounts, and Sponsor Bounties.
         </p>
       </div>
 
-      <!-- 4 Mandatory Categories Matrix -->
-      <div class="tui-grid-4">
-        <div class="category-card">
+      <!-- Ideas & Tracks Matrix -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem; flex-wrap:wrap; gap:0.5rem;">
+        <div class="term-window-title" style="font-size:0.85rem; color:var(--tui-text-highlight);">💡 PROJECT IDEAS & TRACK MATRIX</div>
+        <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+          <button class="neo-chip selected" data-idea-filter="all">All Concepts (9)</button>
+          <button class="neo-chip" data-idea-filter="ai">🤖 AI & Agents</button>
+          <button class="neo-chip" data-idea-filter="defi">🌾 DeFi & Trading</button>
+          <button class="neo-chip" data-idea-filter="infra">🛡️ Security & Infra</button>
+          <button class="neo-chip" data-idea-filter="bounty">🏆 Sponsor Bounties</button>
+        </div>
+      </div>
+
+      <div class="tui-grid-3" id="ideas-grid">
+        <!-- Idea 1 -->
+        <div class="category-card" data-cat="ai">
           <div class="category-card-header">
-            <span style="font-size:1.4rem;">⚖️</span>
-            <span class="diff-pill-good">MANDATORY</span>
+            <span style="font-size:1.3rem;">🤖</span>
+            <span class="track-badge-gold">$30K MAIN TRACK</span>
           </div>
-          <h3 class="category-title">1. Rebalancing</h3>
+          <h3 class="category-title">BNB Agent Studio Marketplace</h3>
           <p style="font-size:0.78rem; color:var(--tui-text-dim);">
-            Dynamic LP range management on PancakeSwap v3 / Thena. Auto-resets out-of-range liquidity into optimal tick ranges.
+            The canonical front door for every agent on BSC. Discover, evaluate, and hire verified agents with transparent strategy telemetry and on-chain trust scores.
           </p>
         </div>
 
-        <div class="category-card">
+        <!-- Idea 2 -->
+        <div class="category-card" data-cat="defi">
           <div class="category-card-header">
-            <span style="font-size:1.4rem;">📊</span>
-            <span class="diff-pill-good">MANDATORY</span>
+            <span style="font-size:1.3rem;">⚖️</span>
+            <span class="diff-pill-good">REBALANCING</span>
           </div>
-          <h3 class="category-title">2. Grid Trading</h3>
+          <h3 class="category-title">Autonomous DEX LP Rebalancer</h3>
           <p style="font-size:0.78rem; color:var(--tui-text-dim);">
-            Automated buy-low / sell-high grid order execution across volatile BNB pairs with customizable geometric spacing.
+            Dynamic concentrated liquidity rebalancer for PancakeSwap v3 & Thena. Automatically shifts out-of-range positions to maximize fee yields.
           </p>
         </div>
 
-        <div class="category-card">
+        <!-- Idea 3 -->
+        <div class="category-card" data-cat="defi">
           <div class="category-card-header">
-            <span style="font-size:1.4rem;">🚀</span>
-            <span class="diff-pill-good">MANDATORY</span>
+            <span style="font-size:1.3rem;">📊</span>
+            <span class="diff-pill-good">GRID TRADING</span>
           </div>
-          <h3 class="category-title">3. Yield Optimisation</h3>
+          <h3 class="category-title">Geometric Grid Trading Bot</h3>
           <p style="font-size:0.78rem; color:var(--tui-text-dim);">
-            Continuous liquidity routing across Venus, Lista DAO, and Aave v3 to maximize net APY with risk-adjusted scoring.
+            High-frequency buy-low / sell-high grid order execution across volatile BNB pairs with customizable volatility bands and stop-loss guards.
           </p>
         </div>
 
-        <div class="category-card">
+        <!-- Idea 4 -->
+        <div class="category-card" data-cat="defi">
           <div class="category-card-header">
-            <span style="font-size:1.4rem;">🛡️</span>
-            <span class="diff-pill-good">MANDATORY</span>
+            <span style="font-size:1.3rem;">🚀</span>
+            <span class="diff-pill-good">YIELD ROUTING</span>
           </div>
-          <h3 class="category-title">4. Health Factor</h3>
+          <h3 class="category-title">Cross-Protocol Yield Compounder</h3>
           <p style="font-size:0.78rem; color:var(--tui-text-dim);">
-            Autonomous loan health monitoring. Automatically triggers emergency debt repayment or collateral flash-topup before liquidation.
+            Continuous liquidity routing across Venus, Lista DAO, and Aave v3 to automatically capture highest risk-adjusted lending APY.
+          </p>
+        </div>
+
+        <!-- Idea 5 -->
+        <div class="category-card" data-cat="infra">
+          <div class="category-card-header">
+            <span style="font-size:1.3rem;">🛡️</span>
+            <span class="diff-pill-good">HEALTH SENTINEL</span>
+          </div>
+          <h3 class="category-title">DeFi Liquidation Defense Flash-Topup</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Autonomous health factor monitoring that automatically executes emergency debt repayment or flash-collateral topups before liquidation penalty.
+          </p>
+        </div>
+
+        <!-- Idea 6 -->
+        <div class="category-card" data-cat="bounty">
+          <div class="category-card-header">
+            <span style="font-size:1.3rem;">⚡</span>
+            <span class="track-badge-gold">TERMIX ($10K)</span>
+          </div>
+          <h3 class="category-title">Agent Advantage Benchmark Engine</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Live latency, cost, and output quality benchmark report comparing manual trader workflows vs. AI agent execution across 3 real tasks.
+          </p>
+        </div>
+
+        <!-- Idea 7 -->
+        <div class="category-card" data-cat="bounty">
+          <div class="category-card-header">
+            <span style="font-size:1.3rem;">🔑</span>
+            <span class="track-badge-gold">ALTANA (50K XP)</span>
+          </div>
+          <h3 class="category-title">Sovereign Keystore Session Key Wallet</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Self-custodial agent execution on Altana smart accounts with scoped contract allowlists, max 2.5 BNB spend limits, and 7-day auto-expiry keys.
+          </p>
+        </div>
+
+        <!-- Idea 8 -->
+        <div class="category-card" data-cat="bounty">
+          <div class="category-card-header">
+            <span style="font-size:1.3rem;">🥞</span>
+            <span class="track-badge-gold">CAKE (1,000)</span>
+          </div>
+          <h3 class="category-title">PancakeSwap Smart Router & MEV Shield</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Multi-hop split routing across PancakeSwap v2, v3, and Infinity Pools with zero sandwich loss and automated arbitrage detection.
+          </p>
+        </div>
+
+        <!-- Idea 9 -->
+        <div class="category-card" data-cat="infra">
+          <div class="category-card-header">
+            <span style="font-size:1.3rem;">🌐</span>
+            <span class="diff-pill-good">ERC-8004 TRUST</span>
+          </div>
+          <h3 class="category-title">On-Chain Reputation & Telemetry Registry</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            ERC-8004 agent trust oracle powered by 8004scan Pro API (500 req/min, 100k req/day) for cryptographically verified agent telemetry.
           </p>
         </div>
       </div>
 
       <!-- Partner Bounties Grid -->
-      <div class="tui-grid-2">
+      <div class="tui-grid-2" style="margin-top:1rem;">
         <!-- TermiX Challenge & Agent Advantage Report -->
         <div class="term-window">
           <div class="term-window-header">
@@ -561,8 +636,8 @@
 
     <!-- BOTTOM INTERACTIVE CLI PROMPT -->
     <footer class="term-cli-footer">
-      <span class="term-cli-prompt">user@bnb-agent:~$</span>
-      <input type="text" class="term-cli-input" id="cli-command-input" placeholder="Type commands: 'tracks', 'tasks', 'flexbox', 'deadlines', 'theme <amber|green|cyan|slate>', 'crt', 'seed', '1-9'..." autocomplete="off">
+      <span class="term-cli-prompt">user@hackathon:~$</span>
+      <input type="text" class="term-cli-input" id="cli-command-input" placeholder="Type commands: 'tracks', 'tasks', 'flexbox', 'deadlines', 'theme <amber|slate>', 'crt', 'seed', '1-9'..." autocomplete="off">
     </footer>
   </main>
 

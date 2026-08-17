@@ -11,7 +11,7 @@ const state = {
   team: [],
   progress: null,
   pgbot: null,
-  theme: localStorage.getItem('tui-theme') || 'amber',
+  theme: (localStorage.getItem('tui-theme') === 'slate') ? 'slate' : 'amber',
   crtEnabled: localStorage.getItem('tui-crt') !== 'false',
   filters: {
     taskAssignee: 'ALL',
@@ -29,7 +29,7 @@ const state = {
   },
 };
 
-const THEMES = ['amber', 'green', 'cyan', 'slate'];
+const THEMES = ['amber', 'slate'];
 let flexboxLabInstance = null;
 
 // Helper: Escape HTML
@@ -924,6 +924,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const radioPlayBtn = document.getElementById('btn-radio-toggle-play');
   if (radioPlayBtn) radioPlayBtn.addEventListener('click', toggleRadioPlay);
+
+  // Idea filter chips in /tracks
+  document.querySelectorAll('[data-idea-filter]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('[data-idea-filter]').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      const filter = chip.dataset.ideaFilter;
+      document.querySelectorAll('#ideas-grid .category-card').forEach(card => {
+        if (filter === 'all' || card.dataset.cat === filter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
 
   // Assignee filter
   const filterSel = document.getElementById('task-filter-assignee');
