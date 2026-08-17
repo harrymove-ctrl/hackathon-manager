@@ -1,6 +1,6 @@
 # Phase 3: API Routes
 
-**Date**: 2026-08-15 | **Priority**: High | **Status**: Pending
+**Date**: 2026-08-15 | **Priority**: High | **Status**: Completed
 
 ## Overview
 Build RESTful API endpoints for all CRUD operations.
@@ -77,10 +77,10 @@ const createResourceSchema = z.object({
 ```
 
 ## Success Criteria
-- [ ] All endpoints return correct HTTP status codes
-- [ ] Validation prevents invalid data
-- [ ] Error handling returns meaningful messages
-- [ ] API responds within 200ms for queries
+- [x] All endpoints return correct HTTP status codes
+- [x] Validation prevents invalid data
+- [x] Error handling returns meaningful messages
+- [x] API responds within 200ms for queries
 
 ## Next Steps
 → [Phase 4: pgbot Integration](phase-04-pgbot.md)

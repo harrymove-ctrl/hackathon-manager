@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="amber">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TERM-v0 // Radio Station Browser & Stream Inspector</title>
+  <meta name="description" content="Retro terminal radio station browser using Radio Browser API. High-tech TUI with live audio stream inspector and oscilloscope visualizer.">
+  
+  <!-- Monospace Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    /* TERM-V0 RETRO TERMINAL DESIGN SYSTEM */
+    :root {
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --font-display: 'VT323', monospace;
+
+      /* Amber Phosphor Theme (Default) */
+      --tui-bg: #0d0a02;
+      --tui-panel: #161205;
+      --tui-panel-border: #42300b;
+      --tui-text-primary: #ffb000;
+      --tui-text-dim: #996a00;
+      --tui-text-highlight: #ffe066;
+      --tui-cursor: #ffb000;
+      --tui-glow: 0 0 8px rgba(255, 176, 0, 0.45);
+      --tui-glow-strong: 0 0 16px rgba(255, 176, 0, 0.7);
+      --tui-active-row: rgba(255, 176, 0, 0.12);
+      --tui-accent: #ff8800;
+      --tui-red: #ff4444;
+      --tui-green: #33ff33;
+      --tui-blue: #00e5ff;
+    }
+
+    [data-theme="green"] {
+      --tui-bg: #020d04;
+      --tui-panel: #051609;
+      --tui-panel-border: #0b421a;
+      --tui-text-primary: #33ff66;
+      --tui-text-dim: #1a8c38;
+      --tui-text-highlight: #88ffaa;
+      --tui-cursor: #33ff66;
+      --tui-glow: 0 0 8px rgba(51, 255, 102, 0.45);
+      --tui-glow-strong: 0 0 16px rgba(51, 255, 102, 0.7);
+      --tui-active-row: rgba(51, 255, 102, 0.12);
+      --tui-accent: #00ffaa;
+    }
+
+    [data-theme="cyan"] {
+      --tui-bg: #02090d;
+      --tui-panel: #051116;
+      --tui-panel-border: #0b2e42;
+      --tui-text-primary: #00e5ff;
+      --tui-text-dim: #007380;
+      --tui-text-highlight: #80f2ff;
+      --tui-cursor: #00e5ff;
+      --tui-glow: 0 0 8px rgba(0, 229, 255, 0.45);
+      --tui-glow-strong: 0 0 16px rgba(0, 229, 255, 0.7);
+      --tui-active-row: rgba(0, 229, 255, 0.12);
+      --tui-accent: #00aaff;
+    }
+
+    [data-theme="white"] {
+      --tui-bg: #0a0a0a;
+      --tui-panel: #141414;
+      --tui-panel-border: #333333;
+      --tui-text-primary: #e0e0e0;
+      --tui-text-dim: #777777;
+      --tui-text-highlight: #ffffff;
+      --tui-cursor: #ffffff;
+      --tui-glow: 0 0 6px rgba(255, 255, 255, 0.3);
+      --tui-glow-strong: 0 0 12px rgba(255, 255, 255, 0.5);
+      --tui-active-row: rgba(255, 255, 255, 0.1);
+      --tui-accent: #cccccc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--tui-bg);
+      color: var(--tui-text-primary);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.45;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      text-shadow: var(--tui-glow);
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* CRT Scanlines Overlay */
+    .crt-overlay {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.35) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+      );
+      background-size: 100% 3px, 3px 100%;
+      z-index: 999;
+      opacity: 0.85;
+    }
+
+    .crt-overlay.disabled {
+      display: none;
+    }
+
+    /* TUI Master Container */
+    .terminal-window {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      height: 100vh;
+      gap: 0.5rem;
+    }
+
+    /* Header Bar */
+    .tui-header {
+      background: var(--tui-panel);
+      border: 1px solid var(--tui-panel-border);
+      padding: 0.4rem 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .tui-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+    }
+
+    .tui-tag {
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--tui-text-dim);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .tui-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-tui {
+      background: transparent;
+      border: 1px solid var(--tui-panel-border);
+      color: var(--tui-text-primary);
+      font-family: inherit;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+      text-shadow: var(--tui-glow);
+      transition: all 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-tui:hover, .btn-tui.active {
+      background: var(--tui-text-primary);
+      color: var(--tui-bg);
+      text-shadow: none;
+      font-weight: 700;
+    }
+
+    .btn-tui:active {
+      transform: scale(0.97);
+    }
+
+    /* Telemetry Sub-header */
+    .tui-telemetry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed var(--tui-panel-border);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--tui-text-dim);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tui-telemetry span strong {
+      color: var(--tui-text-highlight);
+    }
+
+    /* Main Grid Split: Station Table vs Station Inspector */
+    .tui-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 0.5rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    @media (max-width: 950px) {
+      .tui-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .terminal-window {
+        height: auto;
+      }
+    }
+
+    /* Panel Container */
+    .tui-panel {
+      background: var(--tui-panel);
+      border: 1px solid var(--tui-panel-border);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      position: relative;
+    }
+
+    .tui-panel-header {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--tui-panel-border);
+      padding: 0.4rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Search & Filter Bar inside Table */
+    .tui-filter-bar {
+      padding: 0.4rem 0.6rem;
+      border-bottom: 1px solid var(--tui-panel-border);
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .tui-input {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--tui-panel-border);
+      color: var(--tui-text-primary);
+      font-family: inherit;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      outline: none;
+      flex: 1;
+    }
+
+    .tui-input:focus {
+      border-color: var(--tui-text-primary);
+      box-shadow: 0 0 6px var(--tui-glow);
+    }
+
+    .tui-select {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--tui-panel-border);
+      color: var(--tui-text-primary);
+      font-family: inherit;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      outline: none;
+    }
+
+    /* Table Scroll Area */
+    .tui-table-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .tui-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .tui-table th {
+      position: sticky;
+      top: 0;
+      background: var(--tui-panel);
+      color: var(--tui-text-dim);
+      border-bottom: 1px solid var(--tui-panel-border);
+      padding: 0.35rem 0.6rem;
+      font-weight: 700;
+      z-index: 10;
+    }
+
+    .tui-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .tui-table tr:hover td {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--tui-text-highlight);
+    }
+
+    .tui-table tr.selected td {
+      background: var(--tui-active-row);
+      color: var(--tui-text-highlight);
+      font-weight: 600;
+    }
+
+    .tui-table tr.playing td {
+      border-left: 3px solid var(--tui-text-primary);
+    }
+
+    /* Right Panel: Station Inspector */
+    .inspector-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* Visualizer Box */
+    .visualizer-card {
+      border: 1px solid var(--tui-panel-border);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.5rem;
+      position: relative;
+    }
+
+    .visualizer-canvas {
+      width: 100%;
+      height: 70px;
+      display: block;
+    }
+
+    /* Stream URL Highlight Box */
+    .stream-url-box {
+      border: 1px solid var(--tui-text-primary);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 0.65rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .stream-url-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--tui-text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stream-url-text {
+      font-size: 0.8rem;
+      color: var(--tui-text-highlight);
+      word-break: break-all;
+      line-height: 1.35;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.4rem;
+      border: 1px dashed var(--tui-panel-border);
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    /* Audio Player Controls */
+    .audio-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      border: 1px solid var(--tui-panel-border);
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.4);
+      flex-wrap: wrap;
+    }
+
+    .volume-box {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+    }
+
+    .volume-slider {
+      accent-color: var(--tui-text-primary);
+      cursor: pointer;
+      width: 90px;
+    }
+
+    /* Metadata details grid */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      font-size: 0.775rem;
+    }
+
+    .meta-item {
+      border: 1px solid var(--tui-panel-border);
+      padding: 0.35rem 0.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      font-size: 0.65rem;
+      color: var(--tui-text-dim);
+      text-transform: uppercase;
+    }
+
+    .meta-val {
+      color: var(--tui-text-highlight);
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Bottom Prompt Bar */
+    .tui-footer-cli {
+      background: var(--tui-panel);
+      border: 1px solid var(--tui-panel-border);
+      padding: 0.4rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .cli-prompt {
+      color: var(--tui-text-primary);
+      font-weight: 700;
+    }
+
+    .cli-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--tui-text-highlight);
+      font-family: inherit;
+      font-size: 0.8rem;
+    }
+
+    /* Hotkey Help Badge */
+    .hotkey-hints {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.7rem;
+      color: var(--tui-text-dim);
+      margin-left: auto;
+    }
+
+    .hotkey-badge {
+      border: 1px solid var(--tui-panel-border);
+      padding: 0.1rem 0.3rem;
+      color: var(--tui-text-primary);
+    }
+
+    /* Status Indicator */
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--tui-text-dim);
+      margin-right: 4px;
+    }
+
+    .status-dot.active {
+      background: var(--tui-text-primary);
+      box-shadow: 0 0 8px var(--tui-text-primary);
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Toast Notification */
+    .tui-toast {
+      position: fixed;
+      bottom: 2.5rem;
+      right: 1.5rem;
+      background: var(--tui-bg);
+      border: 1px solid var(--tui-text-primary);
+      padding: 0.5rem 0.85rem;
+      font-size: 0.8rem;
+      color: var(--tui-text-highlight);
+      box-shadow: var(--tui-glow-strong);
+      z-index: 1000;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Scanlines Effect Overlay -->
+  <div class="crt-overlay" id="crt-overlay"></div>
+
+  <div class="terminal-window">
+    <!-- Top Header -->
+    <header class="tui-header">
+      <div class="tui-title-group">
+        <span style="font-size:1.1rem;">┌─[ RADIO-BROWSER v0.9-TUI ]</span>
+        <span class="tui-tag">ENDPOINT: /json/stations/search?limit=30</span>
+      </div>
+
+      <div class="tui-header-right">
+        <span>THEME:</span>
+        <button class="btn-tui" onclick="setTheme('amber')">AMBER</button>
+        <button class="btn-tui" onclick="setTheme('green')">GREEN</button>
+        <button class="btn-tui" onclick="setTheme('cyan')">CYAN</button>
+        <button class="btn-tui" onclick="setTheme('white')">WHITE</button>
+        <button class="btn-tui" id="crt-toggle-btn" onclick="toggleCRT()">CRT FX: ON</button>
+        <a href="/" class="btn-tui" style="text-decoration:none;">◀ DASHBOARD</a>
+      </div>
+    </header>
+
+    <!-- Telemetry Strip -->
+    <div class="tui-telemetry">
+      <span>STATE: <span class="status-dot" id="live-dot"></span><strong id="state-text">IDLE / READY</strong></span>
+      <span>TUNED FREQ: <strong id="telemetry-station">-- SELECT STATION --</strong></span>
+      <span>CODEC: <strong id="telemetry-codec">--</strong></span>
+      <span>BITRATE: <strong id="telemetry-bitrate">--</strong></span>
+      <span>SIGNAL: <strong id="telemetry-signal">100% SNR [ONLINE]</strong></span>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="tui-grid">
+      <!-- Left Column: Station Table -->
+      <section class="tui-panel">
+        <div class="tui-panel-header">
+          <span>📻 TOP 30 GLOBAL RADIO STATIONS</span>
+          <span id="station-count" style="color:var(--tui-text-dim);">[ 0 / 30 LOADED ]</span>
+        </div>
+
+        <div class="tui-filter-bar">
+          <span style="align-self:center; font-weight:700;">> FILTER:</span>
+          <input type="text" class="tui-input" id="search-input" placeholder="Type station name, tag, or country..." autocomplete="off">
+          <select class="tui-select" id="country-filter">
+            <option value="ALL">ALL COUNTRIES</option>
+          </select>
+          <button class="btn-tui" onclick="fetchStations()" title="Reload from API">↻ SYNC</button>
+        </div>
+
+        <div class="tui-table-container">
+          <table class="tui-table">
+            <thead>
+              <tr>
+                <th style="width: 38px;">#</th>
+                <th>STATION NAME</th>
+                <th>COUNTRY</th>
+                <th>CODEC</th>
+                <th>BITRATE</th>
+                <th>CLICKS</th>
+              </tr>
+            </thead>
+            <tbody id="station-table-body">
+              <tr>
+                <td colspan="6" style="text-align:center; padding: 2rem; color: var(--tui-text-dim);">
+                  CONNECTING TO RADIO-BROWSER API...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right Column: Inspector & Audio Player -->
+      <section class="tui-panel">
+        <div class="tui-panel-header">
+          <span>📡 SIGNAL INSPECTOR & AUDIO STREAM</span>
+          <span id="player-indicator" style="color:var(--tui-text-dim);">[ STOPPED ]</span>
+        </div>
+
+        <div class="inspector-body">
+          <!-- Audio Oscilloscope Canvas -->
+          <div class="visualizer-card">
+            <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--tui-text-dim); margin-bottom:0.25rem;">
+              <span>OSCILLOSCOPE / SPECTRUM ANALYZER</span>
+              <span id="visualizer-freq">CH-1: 44.1 kHz / 16-BIT</span>
+            </div>
+            <canvas class="visualizer-canvas" id="canvas-visualizer"></canvas>
+          </div>
+
+          <!-- Audio Stream Player Controls -->
+          <div class="audio-controls-row">
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn-tui" id="btn-play-pause" onclick="togglePlay()" style="padding:0.35rem 0.8rem; font-weight:700;">
+                ▶ TUNE IN
+              </button>
+              <button class="btn-tui" onclick="stopStream()">■ MUTE/STOP</button>
+              <button class="btn-tui" onclick="playRandomStation()">⚄ RANDOM</button>
+            </div>
+
+            <div class="volume-box">
+              <span>VOL:</span>
+              <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
+              <span id="vol-label">80%</span>
+            </div>
+          </div>
+
+          <!-- Stream URL Display (Primary Requirement) -->
+          <div class="stream-url-box">
+            <div class="stream-url-label">
+              <span>▶ DIRECT STREAM URL (LIVE AUDIO FEED)</span>
+              <button class="btn-tui" onclick="copyStreamUrl()" style="padding:0.1rem 0.4rem; font-size:0.7rem;">[ 📋 COPY URL ]</button>
+            </div>
+            <div class="stream-url-text" id="stream-url-display">
+              -- NO STATION SELECTED --
+            </div>
+            <div style="display:flex; gap:0.4rem; font-size:0.7rem; justify-content:flex-end;">
+              <button class="btn-tui" onclick="openRawStream()">OPEN RAW STREAM ↗</button>
+              <button class="btn-tui" onclick="copyCurlSnippet()">COPY CURL COMMAND</button>
+            </div>
+          </div>
+
+          <!-- Metadata Grid -->
+          <div class="meta-grid">
+            <div class="meta-item">
+              <span class="meta-label">Station Name</span>
+              <span class="meta-val" id="meta-name">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Origin / Country</span>
+              <span class="meta-val" id="meta-country">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Audio Codec & Bitrate</span>
+              <span class="meta-val" id="meta-codec-bitrate">--</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Votes & Click Count</span>
+              <span class="meta-val" id="meta-clicks">--</span>
+            </div>
+            <div class="meta-item" style="grid-column: 1 / -1;">
+              <span class="meta-label">Tags / Genres</span>
+              <span class="meta-val" id="meta-tags">--</span>
+            </div>
+            <div class="meta-item" style="grid-column: 1 / -1;">
+              <span class="meta-label">Official Homepage</span>
+              <span class="meta-val" id="meta-homepage">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom CLI Bar -->
+    <footer class="tui-footer-cli">
+      <span class="cli-prompt">radio@term-v0:~$</span>
+      <input type="text" class="cli-input" id="cli-input" placeholder="Type command: play, pause, next, prev, copy, theme [amber|green|cyan|white], or type station number...">
+      <div class="hotkey-hints">
+        <span><span class="hotkey-badge">↑/↓</span> Select</span>
+        <span><span class="hotkey-badge">ENTER/SPACE</span> Play</span>
+        <span><span class="hotkey-badge">/</span> Search</span>
+        <span><span class="hotkey-badge">M</span> Mute</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Popup -->
+  <div class="tui-toast" id="tui-toast"></div>
+
+  <!-- Hidden HTML5 Audio Element -->
+  <audio id="radio-audio" preload="none" crossorigin="anonymous"></audio>
+
+  <script>
+    // Global State
+    let stations = [];
+    let filteredStations = [];
+    let selectedIndex = -1;
+    let isPlaying = false;
+    let crtEnabled = true;
+
+    const API_URL = 'https://de1.api.radio-browser.info/json/stations/search?limit=30&order=clickcount&reverse=true';
+
+    // DOM Elements
+    const tableBody = document.getElementById('station-table-body');
+    const searchInput = document.getElementById('search-input');
+    const countryFilter = document.getElementById('country-filter');
+    const stationCountEl = document.getElementById('station-count');
+    const audioElement = document.getElementById('radio-audio');
+
+    // Inspector DOM Elements
+    const streamUrlDisplay = document.getElementById('stream-url-display');
+    const metaName = document.getElementById('meta-name');
+    const metaCountry = document.getElementById('meta-country');
+    const metaCodecBitrate = document.getElementById('meta-codec-bitrate');
+    const metaClicks = document.getElementById('meta-clicks');
+    const metaTags = document.getElementById('meta-tags');
+    const metaHomepage = document.getElementById('meta-homepage');
+
+    // Telemetry Elements
+    const telemetryStation = document.getElementById('telemetry-station');
+    const telemetryCodec = document.getElementById('telemetry-codec');
+    const telemetryBitrate = document.getElementById('telemetry-bitrate');
+    const telemetrySignal = document.getElementById('telemetry-signal');
+    const stateText = document.getElementById('state-text');
+    const liveDot = document.getElementById('live-dot');
+    const playerIndicator = document.getElementById('player-indicator');
+    const btnPlayPause = document.getElementById('btn-play-pause');
+
+    // Toast helper
+    function showToast(msg) {
+      const toast = document.getElementById('tui-toast');
+      toast.textContent = `[!] ${msg}`;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2500);
+    }
+
+    // Fetch Stations from Radio Browser API
+    async function fetchStations() {
+      stateText.textContent = 'FETCHING API FEED...';
+      liveDot.classList.add('active');
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center; padding: 2rem; color: var(--tui-text-dim);">
+            CONNECTING TO DE1.API.RADIO-BROWSER.INFO...
+          </td>
+        </tr>
+      `;
+
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        stations = await response.json();
+        
+        // Populate Countries filter
+        populateCountryFilter();
+        applyFilter();
+
+        stateText.textContent = 'FEED SYNCHRONIZED';
+        liveDot.classList.remove('active');
+        showToast('30 Global Radio Stations Loaded');
+
+        // Select first station by default
+        if (filteredStations.length > 0) {
+          selectStation(0, false);
+        }
+      } catch (err) {
+        console.error('API Fetch failed:', err);
+        stateText.textContent = 'API ERROR (USING OFFLINE BUFFER)';
+        liveDot.classList.remove('active');
+        showToast('API unreachable - Loading backup cache');
+        loadFallbackStations();
+      }
+    }
+
+    function populateCountryFilter() {
+      const countries = Array.from(new Set(stations.map(s => s.country).filter(Boolean))).sort();
+      countryFilter.innerHTML = `<option value="ALL">ALL COUNTRIES (${countries.length})</option>`;
+      countries.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c.toUpperCase();
+        countryFilter.appendChild(opt);
+      });
+    }
+
+    function applyFilter() {
+      const query = searchInput.value.toLowerCase().trim();
+      const country = countryFilter.value;
+
+      filteredStations = stations.filter(s => {
+        const matchCountry = (country === 'ALL' || s.country === country);
+        const matchQuery = !query || 
+          s.name.toLowerCase().includes(query) ||
+          (s.country && s.country.toLowerCase().includes(query)) ||
+          (s.tags && s.tags.toLowerCase().includes(query)) ||
+          (s.codec && s.codec.toLowerCase().includes(query));
+
+        return matchCountry && matchQuery;
+      });
+
+      renderTable();
+    }
+
+    function renderTable() {
+      stationCountEl.textContent = `[ ${filteredStations.length} / ${stations.length} LOADED ]`;
+
+      if (filteredStations.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding: 2rem; color: var(--tui-text-dim);">
+              NO MATCHING RADIO STATIONS FOUND FOR QUERY.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = filteredStations.map((s, idx) => {
+        const isSel = idx === selectedIndex;
+        const isCurrentPlaying = isPlaying && idx === selectedIndex;
+        const bitrateStr = s.bitrate && s.bitrate > 0 ? `${s.bitrate}k` : 'Auto';
+        const codecStr = s.codec || 'MP3';
+
+        return `
+          <tr class="${isSel ? 'selected' : ''} ${isCurrentPlaying ? 'playing' : ''}" onclick="selectStation(${idx}, true)">
+            <td style="color:var(--tui-text-dim); font-family:var(--font-display); font-size:1.1rem;">${(idx + 1).toString().padStart(2, '0')}</td>
+            <td style="font-weight:600;">
+              ${isCurrentPlaying ? '<span style="color:var(--tui-text-highlight);">▶ </span>' : ''}
+              ${escapeHtml(s.name)}
+            </td>
+            <td>${escapeHtml(s.country || 'Global')}</td>
+            <td><span class="tui-tag" style="font-size:0.65rem;">${escapeHtml(codecStr)}</span></td>
+            <td>${bitrateStr}</td>
+            <td style="color:var(--tui-text-dim);">★ ${s.clickcount || 0}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function selectStation(index, autoPlay = false) {
+      if (index < 0 || index >= filteredStations.length) return;
+      selectedIndex = index;
+      const s = filteredStations[index];
+
+      // Update Table Highlight
+      renderTable();
+
+      // Display Stream URL (Core User Requirement)
+      const streamUrl = s.url_resolved || s.url;
+      streamUrlDisplay.textContent = streamUrl;
+
+      // Update Inspector Metadata
+      metaName.textContent = s.name;
+      metaCountry.textContent = `${s.country || 'Unknown'} (${s.countrycode || 'XX'})`;
+      metaCodecBitrate.textContent = `${s.codec || 'MP3'} @ ${s.bitrate ? s.bitrate + ' kbps' : 'Dynamic'}`;
+      metaClicks.textContent = `${s.clickcount || 0} clicks (${s.votes || 0} votes)`;
+      metaTags.textContent = s.tags || 'General, Music';
+      metaHomepage.innerHTML = s.homepage ? `<a href="${escapeHtml(s.homepage)}" target="_blank" style="color:var(--tui-text-highlight); text-decoration:none;">${escapeHtml(s.homepage)} ↗</a>` : 'N/A';
+
+      // Update Telemetry Header
+      telemetryStation.textContent = s.name.toUpperCase();
+      telemetryCodec.textContent = s.codec || 'MP3';
+      telemetryBitrate.textContent = s.bitrate ? `${s.bitrate} kbps` : 'Auto';
+
+      if (autoPlay) {
+        startStream(streamUrl);
+      }
+    }
+
+    function startStream(url) {
+      stateText.textContent = 'TUNING STREAM BUFFER...';
+      liveDot.classList.add('active');
+      playerIndicator.textContent = '[ TUNING... ]';
+      playerIndicator.style.color = 'var(--tui-text-highlight)';
+
+      audioElement.src = url;
+      audioElement.play()
+        .then(() => {
+          isPlaying = true;
+          stateText.textContent = 'BROADCASTING LIVE';
+          playerIndicator.textContent = '[ ▶ PLAYING ]';
+          btnPlayPause.textContent = '⏸ PAUSE';
+          showToast(`Tuned to: ${filteredStations[selectedIndex]?.name}`);
+          renderTable();
+        })
+        .catch(err => {
+          console.warn('Direct stream autoplay error:', err);
+          stateText.textContent = 'STREAM CONNECTED (CLICK PLAY)';
+          playerIndicator.textContent = '[ BUFFER READY ]';
+          btnPlayPause.textContent = '▶ PLAY';
+        });
+    }
+
+    function togglePlay() {
+      if (selectedIndex === -1 && filteredStations.length > 0) {
+        selectStation(0, true);
+        return;
+      }
+
+      if (isPlaying) {
+        audioElement.pause();
+        isPlaying = false;
+        stateText.textContent = 'STREAM PAUSED';
+        playerIndicator.textContent = '[ PAUSED ]';
+        btnPlayPause.textContent = '▶ RESUME';
+        liveDot.classList.remove('active');
+      } else {
+        const s = filteredStations[selectedIndex];
+        if (s) {
+          const url = s.url_resolved || s.url;
+          if (audioElement.src !== url) {
+            startStream(url);
+          } else {
+            audioElement.play();
+            isPlaying = true;
+            stateText.textContent = 'BROADCASTING LIVE';
+            playerIndicator.textContent = '[ ▶ PLAYING ]';
+            btnPlayPause.textContent = '⏸ PAUSE';
+            liveDot.classList.add('active');
+          }
+        }
+      }
+      renderTable();
+    }
+
+    function stopStream() {
+      audioElement.pause();
+      audioElement.src = '';
+      isPlaying = false;
+      stateText.textContent = 'RECEIVER STANDBY';
+      playerIndicator.textContent = '[ STOPPED ]';
+      btnPlayPause.textContent = '▶ TUNE IN';
+      liveDot.classList.remove('active');
+      renderTable();
+      showToast('Audio Receiver Stopped');
+    }
+
+    function setVolume(val) {
+      audioElement.volume = parseFloat(val);
+      document.getElementById('vol-label').textContent = `${Math.round(val * 100)}%`;
+    }
+
+    function playRandomStation() {
+      if (filteredStations.length === 0) return;
+      const randIdx = Math.floor(Math.random() * filteredStations.length);
+      selectStation(randIdx, true);
+    }
+
+    function copyStreamUrl() {
+      const text = streamUrlDisplay.textContent.trim();
+      if (!text || text.includes('NO STATION SELECTED')) {
+        showToast('Please select a station first');
+        return;
+      }
+      navigator.clipboard.writeText(text);
+      showToast('Stream URL copied to clipboard!');
+    }
+
+    function copyCurlSnippet() {
+      const text = streamUrlDisplay.textContent.trim();
+      if (!text || text.includes('NO STATION SELECTED')) return;
+      const cmd = `curl -I "${text}"`;
+      navigator.clipboard.writeText(cmd);
+      showToast('cURL snippet copied!');
+    }
+
+    function openRawStream() {
+      const text = streamUrlDisplay.textContent.trim();
+      if (!text || text.includes('NO STATION SELECTED')) return;
+      window.open(text, '_blank');
+    }
+
+    function setTheme(name) {
+      document.documentElement.setAttribute('data-theme', name);
+      showToast(`Theme switched to: ${name.toUpperCase()}`);
+    }
+
+    function toggleCRT() {
+      crtEnabled = !crtEnabled;
+      document.getElementById('crt-overlay').classList.toggle('disabled', !crtEnabled);
+      document.getElementById('crt-toggle-btn').textContent = `CRT FX: ${crtEnabled ? 'ON' : 'OFF'}`;
+    }
+
+    // Canvas Oscilloscope / Spectrum Visualizer Animation
+    const canvas = document.getElementById('canvas-visualizer');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = canvas.clientWidth * window.devicePixelRatio;
+      canvas.height = canvas.clientHeight * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let animPhase = 0;
+    function drawVisualizer() {
+      requestAnimationFrame(drawVisualizer);
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Background grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let y = 0; y < h; y += 15) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Draw Spectrum Bars
+      const numBars = 36;
+      const barWidth = w / numBars - 2;
+      const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--tui-text-primary').trim() || '#ffb000';
+
+      ctx.fillStyle = activeColor;
+
+      for (let i = 0; i < numBars; i++) {
+        let barHeight = 4;
+        if (isPlaying) {
+          const wave = Math.sin(animPhase * 3 + i * 0.4) * 0.5 + 0.5;
+          const noise = Math.sin(i * 1.5 + animPhase * 5) * 0.3 + 0.5;
+          barHeight = (wave * 0.7 + noise * 0.3) * (h * 0.85);
+        } else {
+          barHeight = Math.sin(animPhase + i * 0.2) * 4 + 6;
+        }
+
+        const x = i * (barWidth + 2);
+        const y = h - barHeight;
+
+        ctx.fillRect(x, y, barWidth, barHeight);
+      }
+
+      // Draw Waveform line
+      ctx.beginPath();
+      ctx.strokeStyle = activeColor;
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = isPlaying ? 10 : 2;
+      ctx.shadowColor = activeColor;
+
+      for (let x = 0; x < w; x += 4) {
+        const freq = isPlaying ? 0.04 : 0.02;
+        const amp = isPlaying ? h * 0.25 : h * 0.08;
+        const y = h * 0.45 + Math.sin(x * freq + animPhase * 4) * amp + Math.cos(x * 0.02 - animPhase * 2) * (amp * 0.5);
+
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      animPhase += 0.04;
+    }
+    drawVisualizer();
+
+    // CLI Input Command Parser
+    const cliInput = document.getElementById('cli-input');
+    cliInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = cliInput.value.trim().toLowerCase();
+        cliInput.value = '';
+
+        if (!cmd) return;
+
+        if (cmd === 'play' || cmd === 'tune') {
+          togglePlay();
+        } else if (cmd === 'pause' || cmd === 'stop') {
+          stopStream();
+        } else if (cmd === 'next' || cmd === 'j') {
+          if (selectedIndex < filteredStations.length - 1) selectStation(selectedIndex + 1, true);
+        } else if (cmd === 'prev' || cmd === 'k') {
+          if (selectedIndex > 0) selectStation(selectedIndex - 1, true);
+        } else if (cmd === 'random' || cmd === 'rand') {
+          playRandomStation();
+        } else if (cmd === 'copy' || cmd === 'url') {
+          copyStreamUrl();
+        } else if (cmd.startsWith('theme ')) {
+          const t = cmd.replace('theme ', '').trim();
+          if (['amber', 'green', 'cyan', 'white'].includes(t)) setTheme(t);
+        } else if (cmd.startsWith('search ')) {
+          const q = cmd.replace('search ', '').trim();
+          searchInput.value = q;
+          applyFilter();
+        } else if (!isNaN(parseInt(cmd))) {
+          const num = parseInt(cmd) - 1;
+          if (num >= 0 && num < filteredStations.length) selectStation(num, true);
+        } else {
+          showToast(`Unknown command: ${cmd}`);
+        }
+      }
+    });
+
+    // Keyboard Shortcuts Navigation
+    window.addEventListener('keydown', (e) => {
+      // Don't capture when typing in inputs
+      if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        if (e.key === 'Escape') document.activeElement.blur();
+        return;
+      }
+
+      if (e.key === 'ArrowDown' || e.key === 'j') {
+        e.preventDefault();
+        if (selectedIndex < filteredStations.length - 1) selectStation(selectedIndex + 1, false);
+      } else if (e.key === 'ArrowUp' || e.key === 'k') {
+        e.preventDefault();
+        if (selectedIndex > 0) selectStation(selectedIndex - 1, false);
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === '/') {
+        e.preventDefault();
+        searchInput.focus();
+      } else if (e.key.toLowerCase() === 'm') {
+        stopStream();
+      } else if (e.key.toLowerCase() === 'r') {
+        playRandomStation();
+      } else if (e.key.toLowerCase() === 'c') {
+        copyStreamUrl();
+      }
+    });
+
+    // Filter Listeners
+    searchInput.addEventListener('input', applyFilter);
+    countryFilter.addEventListener('change', applyFilter);
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Fallback Mock Data in case external API is blocked by offline/CORS
+    function loadFallbackStations() {
+      stations = [
+        { name: "102.7 KIIS FM", country: "United States", countrycode: "US", codec: "AAC", bitrate: 320, clickcount: 952, url: "https://stream.revma.ihrhls.com/zc185", tags: "pop, top 40", homepage: "https://kiisfm.iheart.com/" },
+        { name: "Arabesk FM", country: "Türkiye", countrycode: "TR", codec: "AAC+", bitrate: 64, clickcount: 765, url: "http://yayin.arabeskfm.biz:8042/", tags: "müzik, türkçe", homepage: "http://www.arabeskfm.biz/" },
+        { name: "MANGORADIO", country: "Germany", countrycode: "DE", codec: "MP3", bitrate: 128, clickcount: 735, url: "https://mangoradio.stream.laut.fm/mangoradio", tags: "music, variety", homepage: "https://mangoradio.de/" },
+        { name: "Radio Anonymous", country: "Russian Federation", countrycode: "RU", codec: "MP3", bitrate: 192, clickcount: 706, url: "https://icecast.anon.fm/radio", tags: "radio, electronic", homepage: "https://anon.radio.fm/" },
+        { name: "Classic Vinyl HD", country: "United States", countrycode: "US", codec: "MP3", bitrate: 320, clickcount: 694, url: "https://icecast.walmradio.com:8443/classic", tags: "classic hits, oldies, jazz", homepage: "https://walmradio.com/classic" },
+        { name: "Radio Paradise Main Mix (EU)", country: "United States", countrycode: "US", codec: "AAC", bitrate: 320, clickcount: 564, url: "http://stream-uk1.radioparadise.com/aac-320", tags: "eclectic, rock, free", homepage: "https://radioparadise.com/" },
+        { name: "BBC World Service", country: "United Kingdom", countrycode: "GB", codec: "MP3", bitrate: 56, clickcount: 482, url: "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service", tags: "news, talk, world", homepage: "https://www.bbc.co.uk/programmes/w172xzjgf6lxp7y" },
+        { name: "France Info", country: "France", countrycode: "FR", codec: "MP3", bitrate: 128, clickcount: 480, url: "http://direct.franceinfo.fr/live/franceinfo-midfi.mp3", tags: "news, information", homepage: "https://www.francetvinfo.fr/" },
+        { name: "CNN Radio", country: "United States", countrycode: "US", codec: "MP3", bitrate: 96, clickcount: 475, url: "https://tunein.cdnstream1.com/2868_96.mp3", tags: "news, live", homepage: "https://www.cnn.com/" },
+        { name: "101 SMOOTH JAZZ", country: "United States", countrycode: "US", codec: "MP3", bitrate: 128, clickcount: 386, url: "http://jking.cdnstream1.com/b22139_128mp3", tags: "jazz, smooth jazz, relax", homepage: "http://101smoothjazz.com/" },
+        { name: "Dance Wave!", country: "Hungary", countrycode: "HU", codec: "MP3", bitrate: 128, clickcount: 306, url: "https://dancewave.online/dance.mp3", tags: "dance, club, house, trance", homepage: "https://dancewave.online/" },
+        { name: "80s80s Radio", country: "Germany", countrycode: "DE", codec: "MP3", bitrate: 192, clickcount: 284, url: "http://regiocast.streamabc.net/regc-80s80smweb2517500-mp3-192-1672667", tags: "80s, new wave, pop", homepage: "https://www.80s80s.de/" }
+      ];
+      populateCountryFilter();
+      applyFilter();
+      if (filteredStations.length > 0) selectStation(0, false);
+    }
+
+    // Startup
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchStations();
+    });
+  </script>
+</body>
+</html>

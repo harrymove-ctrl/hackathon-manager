@@ -37,12 +37,12 @@ A team-based hackathon manager with resource management, deadline tracking, and 
 4. **pgbot Integration**: Database health monitoring via MCP
 
 ## Phases
-- [ ] [Phase 1: Project Setup](phase-01-setup.md) - Dependencies, TypeScript, Prisma
-- [ ] [Phase 2: Database Schema](phase-02-schema.md) - Models for resources, deadlines, tasks
-- [ ] [Phase 3: API Routes](phase-03-api.md) - CRUD endpoints
-- [ ] [Phase 4: pgbot Integration](phase-04-pgbot.md) - MCP server setup
-- [ ] [Phase 5: Frontend](phase-05-frontend.md) - Dashboard UI
-- [ ] [Phase 6: Railway Deploy](phase-06-railway.md) - CI/CD setup
+- [x] [Phase 1: Project Setup](phase-01-setup.md) - Dependencies, TypeScript, Prisma
+- [x] [Phase 2: Database Schema](phase-02-schema.md) - Models for resources, deadlines, tasks
+- [x] [Phase 3: API Routes](phase-03-api.md) - CRUD endpoints
+- [x] [Phase 4: pgbot Integration](phase-04-pgbot.md) - MCP server setup & PostgreSQL telemetry
+- [x] [Phase 5: Frontend](phase-05-frontend.md) - Modern Dashboard UI & live countdown ticker
+- [x] [Phase 6: Railway Deploy](phase-06-railway.md) - CI/CD setup, Nixpacks build config & seed script
 
 ## Timeline
 - **Day 1**: Phases 1-3 (Backend core)

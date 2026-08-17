@@ -1,6 +1,6 @@
 # Phase 2: Database Schema
 
-**Date**: 2026-08-15 | **Priority**: High | **Status**: Pending
+**Date**: 2026-08-15 | **Priority**: High | **Status**: Completed
 
 ## Overview
 Define Prisma schema for resources, deadlines, tasks, and team members.
@@ -108,9 +108,9 @@ enum TaskStatus {
 4. Generate Prisma client
 
 ## Success Criteria
-- [ ] Schema validates with `prisma validate`
-- [ ] Migration runs successfully
-- [ ] Prisma client generates types
+- [x] Schema validates with `prisma validate`
+- [x] Migration / schema push runs successfully
+- [x] Prisma client generates types
 
 ## Next Steps
 → [Phase 3: API Routes](phase-03-api.md)

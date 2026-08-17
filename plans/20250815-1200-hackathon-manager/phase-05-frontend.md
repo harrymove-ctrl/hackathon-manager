@@ -1,6 +1,6 @@
 # Phase 5: Frontend Dashboard
 
-**Date**: 2026-08-15 | **Priority**: Medium | **Status**: Pending
+**Date**: 2026-08-15 | **Priority**: Medium | **Status**: Completed
 
 ## Overview
 Build a simple dashboard to visualize progress, deadlines, and database health.
@@ -61,11 +61,11 @@ export async function fetchResources() {
 ```
 
 ## Success Criteria
-- [ ] Dashboard loads with all widgets
-- [ ] Can create/edit/delete resources
-- [ ] Deadlines display with priority colors
-- [ ] Team progress shows completion %
-- [ ] DB health badge visible
+- [x] Dashboard loads with all widgets
+- [x] Can create/edit/delete resources
+- [x] Deadlines display with priority colors & live ticking countdown
+- [x] Team progress shows completion % and individual breakdown
+- [x] DB health badge & pgbot telemetry panel active
 
 ## Next Steps
 → [Phase 6: Railway Deploy](phase-06-railway.md)
