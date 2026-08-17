@@ -7,8 +7,9 @@ npm install
 echo "Generating Prisma client..."
 npx prisma generate
 
-echo "Running migrations..."
-npm run db:migrate
+echo "Pushing database schema & seeding..."
+npx prisma db push --accept-data-loss
+npm run seed
 
 echo "Building..."
 npm run build
