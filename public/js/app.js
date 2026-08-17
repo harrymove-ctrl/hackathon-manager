@@ -1,6 +1,5 @@
 import { api } from './api.js';
 import { AnimateText } from './animateText.js';
-import { FlexboxLabs } from './flexboxLabs.js';
 
 // Application State
 const state = {
@@ -30,7 +29,6 @@ const state = {
 };
 
 const THEMES = ['amber', 'slate'];
-let flexboxLabInstance = null;
 
 // Helper: Escape HTML
 function escapeHtml(str) {
@@ -529,12 +527,7 @@ function switchTab(tabName) {
     view.classList.toggle('active', view.id === `tab-${tabName}`);
   });
 
-  if (tabName === 'flexbox') {
-    if (!flexboxLabInstance) {
-      flexboxLabInstance = new FlexboxLabs('neo-flex-playground');
-    }
-    flexboxLabInstance.render();
-  } else if (tabName === 'observability') {
+  if (tabName === 'observability') {
     fetchPgbotStats();
   } else if (tabName === 'radio') {
     if (state.radio.stations.length === 0) fetchRadioStations();
@@ -962,30 +955,29 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (cmd === '2' || cmd === 'tracks') switchTab('tracks');
         else if (cmd === '3' || cmd === 'deadlines') switchTab('deadlines');
         else if (cmd === '4' || cmd === 'tasks') switchTab('tasks');
-        else if (cmd === '5' || cmd === 'flexbox' || cmd === 'flex') switchTab('flexbox');
-        else if (cmd === '6' || cmd === 'resources') switchTab('resources');
-        else if (cmd === '7' || cmd === 'team') switchTab('team');
-        else if (cmd === '8' || cmd === 'pgbot' || cmd === 'observability') switchTab('observability');
-        else if (cmd === '9' || cmd === 'radio') switchTab('radio');
+        else if (cmd === '5' || cmd === 'resources') switchTab('resources');
+        else if (cmd === '6' || cmd === 'team') switchTab('team');
+        else if (cmd === '7' || cmd === 'pgbot' || cmd === 'observability') switchTab('observability');
+        else if (cmd === '8' || cmd === 'radio') switchTab('radio');
         else if (cmd === 'crt') toggleCRT();
         else if (cmd.startsWith('theme ')) setTheme(cmd.split(' ')[1]);
         else if (cmd === 'seed') triggerSeedReset();
         else if (cmd === 'task') openModal('task');
         else if (cmd === 'deadline') openModal('deadline');
-        else if (cmd === '?') showToast('Commands: 1-9, tracks, tasks, flexbox, deadlines, theme, crt, seed');
+        else if (cmd === '?') showToast('Commands: 1-8, tracks, tasks, deadlines, theme, crt, seed');
         else showToast(`Unknown command: ${cmd}`);
       }
     });
   }
 
-  // Keyboard Shortcuts (1-9, T, ESC)
+  // Keyboard Shortcuts (1-8, T, ESC)
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.isContentEditable) {
       if (e.key === 'Escape') closeModal();
       return;
     }
-    if (e.key >= '1' && e.key <= '9') {
-      const tabs = ['overview', 'tracks', 'deadlines', 'tasks', 'flexbox', 'resources', 'team', 'observability', 'radio'];
+    if (e.key >= '1' && e.key <= '8') {
+      const tabs = ['overview', 'tracks', 'deadlines', 'tasks', 'resources', 'team', 'observability', 'radio'];
       switchTab(tabs[parseInt(e.key) - 1]);
     } else if (e.key.toLowerCase() === 't') {
       cycleTheme();
@@ -996,7 +988,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initial Tab from URL hash or default overview
   const initialHash = window.location.hash.replace('#', '');
-  if (initialHash && ['overview', 'tracks', 'deadlines', 'tasks', 'flexbox', 'resources', 'team', 'observability', 'radio'].includes(initialHash)) {
+  if (initialHash && ['overview', 'tracks', 'deadlines', 'tasks', 'resources', 'team', 'observability', 'radio'].includes(initialHash)) {
     switchTab(initialHash);
   } else {
     switchTab('overview');

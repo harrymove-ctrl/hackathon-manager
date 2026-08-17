@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BNB Chain Hackathon // The Smart Money Era & Neo Flex Labs</title>
-  <meta name="description" content="BNB Chain Smart Money Era hackathon command, multi-track project ideas, TermiX Agent Advantage Report, Altana session keys, pgbot PostgreSQL observability, and Neo Flexbox Labs visual playground.">
+  <title>BNB Chain Hackathon // The Smart Money Era</title>
+  <meta name="description" content="BNB Chain Smart Money Era hackathon command center, multi-track project ideas matrix, TermiX Agent Advantage Report, Altana session keys, pgbot PostgreSQL observability.">
   
   <!-- Preconnect and Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
       </a>
     </div>
 
-    <!-- Navigation Menu with Delimiters -->
+    <!-- Navigation Menu with Delimiters (Neo-Brutalist Layout) -->
     <div class="tui-nav-links">
       <button class="tui-nav-link active" data-tab="overview">/overview</button>
       <span class="tui-nav-punct">:</span>
@@ -39,8 +39,6 @@
       <button class="tui-nav-link" data-tab="deadlines">/deadlines</button>
       <span class="tui-nav-punct">:</span>
       <button class="tui-nav-link" data-tab="tasks">/tasks</button>
-      <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="flexbox">/flexbox</button>
       <span class="tui-nav-punct">:</span>
       <button class="tui-nav-link" data-tab="resources">/resources</button>
       <span class="tui-nav-punct">:</span>
@@ -103,9 +101,6 @@
           <button class="btn-term btn-term-sm" id="btn-copy-install" title="Copy to clipboard">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
             <span>COPY</span>
-          </button>
-          <button class="btn-term btn-term-sm" id="btn-quick-flexbox" onclick="window.switchTab('flexbox')" title="Open Neo Flexbox Labs Visual Playground">
-            <span>📐 FLEX LABS</span>
           </button>
           <a href="https://www.bnbchain.org/en/hackathons/smart-money-era?tab=tracks" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary">
             <span>SUBMIT PROJECT ↗</span>
@@ -493,30 +488,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 5: NEO FLEXBOX LABS (/flexbox) - CLONED FROM PRAZZON/FLEXBOX-LABS
-         ==================================================================== -->
-    <section class="tui-view" id="tab-flexbox">
-      <div class="term-window">
-        <div class="term-window-header">
-          <div class="term-traffic-lights">
-            <span class="term-dot term-dot-red"></span>
-            <span class="term-dot term-dot-yellow"></span>
-            <span class="term-dot term-dot-green"></span>
-          </div>
-          <div class="term-window-title">📐 NEO FLEXBOX LABS // VISUAL CSS PLAYGROUND</div>
-          <div style="display:flex; align-items:center; gap:0.5rem;">
-            <span class="diff-pill-good">LIVE INTERACTIVE</span>
-          </div>
-        </div>
-        <div class="term-window-body" style="padding:0.75rem;">
-          <!-- Mount point for FlexboxLabs -->
-          <div id="neo-flex-playground"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         VIEW 6: RESOURCES & TOOLKIT (/resources)
+         VIEW 5: RESOURCES & TOOLKIT (/resources)
          ==================================================================== -->
     <section class="tui-view" id="tab-resources">
       <div class="term-window">
@@ -538,7 +510,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 7: SQUAD MATRIX (/team)
+         VIEW 6: SQUAD MATRIX (/team)
          ==================================================================== -->
     <section class="tui-view" id="tab-team">
       <div class="term-window">
@@ -560,7 +532,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 8: PGBOT OBSERVABILITY (/pgbot)
+         VIEW 7: PGBOT OBSERVABILITY (/pgbot)
          ==================================================================== -->
     <section class="tui-view" id="tab-observability">
       <div class="term-window">
@@ -606,7 +578,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 9: RADIO STREAMER (/radio)
+         VIEW 8: RADIO STREAMER (/radio)
          ==================================================================== -->
     <section class="tui-view" id="tab-radio">
       <div class="term-window">
@@ -640,7 +612,7 @@
     <!-- BOTTOM INTERACTIVE CLI PROMPT -->
     <footer class="term-cli-footer">
       <span class="term-cli-prompt">user@hackathon:~$</span>
-      <input type="text" class="term-cli-input" id="cli-command-input" placeholder="Type commands: 'tracks', 'tasks', 'flexbox', 'deadlines', 'theme <amber|slate>', 'crt', 'seed', '1-9'..." autocomplete="off">
+      <input type="text" class="term-cli-input" id="cli-command-input" placeholder="Type commands: 'tracks', 'tasks', 'deadlines', 'theme <amber|slate>', 'crt', 'seed', '1-8'..." autocomplete="off">
     </footer>
   </main>
 
