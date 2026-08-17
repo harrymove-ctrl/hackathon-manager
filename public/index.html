@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>term-v0 // BNB Chain Hackathon: The Smart Money Era</title>
-  <meta name="description" content="term-v0 terminal interface for BNB Chain Smart Money Era hackathon management, AI agent marketplace tracks, TermiX Agent Advantage Report, Altana session keys, and pgbot PostgreSQL observability.">
+  <title>BNB Chain Hackathon // The Smart Money Era & Neo Flex Labs</title>
+  <meta name="description" content="BNB Chain Smart Money Era hackathon management, AI agent marketplace tracks, TermiX Agent Advantage Report, Altana session keys, pgbot PostgreSQL observability, and Neo Flexbox Labs visual playground.">
   
   <!-- Preconnect and Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,79 +17,67 @@
   <!-- CRT Scanlines Overlay (Toggleable) -->
   <div class="crt-overlay" id="crt-overlay"></div>
 
-  <!-- FLOATING TERM-V0 NAVBAR -->
+  <!-- FLOATING NAVBAR -->
   <nav class="tui-nav-bar" role="navigation" aria-label="Main Navigation">
     <div class="tui-nav-left">
-      <a href="/" class="tui-nav-logo" title="term-v0 // BNB Chain Hackathon Command">
+      <a href="/" class="tui-nav-logo" title="BNB Chain Hackathon: The Smart Money Era">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--tui-accent);">
           <rect width="18" height="18" x="3" y="3" rx="4"></rect>
           <path d="m9 8 4 4-4 4"></path>
           <path d="M15 16h2"></path>
         </svg>
-        <span style="font-family:var(--font-serif); font-size:1.15rem;">term-v0</span>
+        <span class="tui-brand-tag">BNB AGENT STUDIO</span>
       </a>
-      <span class="tui-beta-badge">EARLY BETA</span>
     </div>
 
-    <!-- Punctuation-delimited navigation links -->
-    <div class="tui-nav-links" role="tablist">
-      <button class="tui-nav-link active" data-tab="overview" id="nav-overview" role="tab" aria-selected="true">
-        /overview
-      </button>
+    <!-- Navigation Menu with Delimiters -->
+    <div class="tui-nav-links">
+      <button class="tui-nav-link active" data-tab="overview">/overview</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="tracks" id="nav-tracks" role="tab" aria-selected="false">
-        /tracks
-      </button>
+      <button class="tui-nav-link" data-tab="tracks">/tracks</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="deadlines" id="nav-deadlines" role="tab" aria-selected="false">
-        /deadlines
-      </button>
+      <button class="tui-nav-link" data-tab="deadlines">/deadlines</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="tasks" id="nav-tasks" role="tab" aria-selected="false">
-        /tasks
-      </button>
+      <button class="tui-nav-link" data-tab="tasks">/tasks</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="resources" id="nav-resources" role="tab" aria-selected="false">
-        /resources
-      </button>
+      <button class="tui-nav-link" data-tab="flexbox">/flexbox</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="team" id="nav-team" role="tab" aria-selected="false">
-        /team
-      </button>
+      <button class="tui-nav-link" data-tab="resources">/resources</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="observability" id="nav-observability" role="tab" aria-selected="false">
-        /pgbot
-      </button>
+      <button class="tui-nav-link" data-tab="team">/team</button>
       <span class="tui-nav-punct">:</span>
-      <button class="tui-nav-link" data-tab="radio" id="nav-radio" role="tab" aria-selected="false">
-        /radio
-      </button>
+      <button class="tui-nav-link" data-tab="observability">/pgbot</button>
+      <span class="tui-nav-punct">:</span>
+      <button class="tui-nav-link" data-tab="radio">/radio</button>
       <span class="tui-nav-punct">::</span>
     </div>
 
-    <!-- Quick action controls & Theme palette -->
+    <!-- Top Right Actions -->
     <div class="tui-nav-right">
-      <button class="btn-term btn-term-sm" id="btn-theme-cycle" title="Cycle Palette (Amber, Green, Cyan, Slate)" onclick="cycleTheme()">
-        <span id="theme-indicator">AMBER</span>
+      <button class="btn-term btn-term-sm" id="btn-cycle-theme" title="Cycle Themes (Amber, Green, Cyan, Slate)">
+        <span id="theme-name-display">AMBER</span>
       </button>
-      <button class="btn-term btn-term-sm" id="btn-crt-toggle" title="Toggle CRT Scanline Effect" onclick="toggleCRT()">
+      <button class="btn-term btn-term-sm" id="btn-toggle-crt" title="Toggle CRT scanline raster">
         CRT: ON
       </button>
-      <button class="btn-term btn-term-sm" title="Re-seed database with BNB Chain track data" onclick="triggerSeedReset()">
+      <button class="btn-term btn-term-sm" id="btn-seed-db" title="Seed Official BNB Chain Hackathon Data">
         ↻ SEED
       </button>
-      <button class="btn-term btn-term-sm btn-term-primary" onclick="openModal('task')">
+      <button class="btn-term btn-term-sm btn-term-primary" id="btn-new-task" title="Add Deliverable Task">
         + TASK
       </button>
     </div>
   </nav>
 
-  <!-- MASTER CONTAINER -->
-  <div class="tui-shell">
+  <!-- MASTER SHELL -->
+  <main class="tui-shell">
     
-    <!-- TERM-V0 HERO SECTION -->
+    <!-- HERO SECTION WITH ANIMATE-TEXT CAPABILITIES -->
     <section class="term-hero">
-      <h1 class="term-hero-title">The Smart Money Era: Build the Era</h1>
+      <h1 class="term-hero-title anim-shimmer-sweep" id="hero-main-title">
+        The Smart Money Era: Build the Era
+      </h1>
+
       <div class="term-hero-subtitle">
         <span>BNB CHAIN HACKATHON</span>
         <span>•</span>
@@ -98,68 +86,77 @@
         <span>PARTNER BOUNTIES: TERMIX ($10K) • ALTANA (50K XP) • CAKE (1K)</span>
       </div>
 
-      <!-- Quick Command Installer Bar (term-v0 style) -->
+      <!-- Animate-Text Kinetic Engine Selector -->
+      <div class="neo-motion-bar">
+        <span style="color:var(--tui-text-dim); font-size:0.68rem; margin-right:4px;">MOTION:</span>
+        <button class="motion-chip active" data-motion="soft-blur-in">Soft Blur</button>
+        <button class="motion-chip" data-motion="shimmer-sweep">Shimmer</button>
+        <button class="motion-chip" data-motion="typewriter">Typewriter</button>
+        <button class="motion-chip" data-motion="per-character-rise">Kinetic Rise</button>
+        <button class="motion-chip" data-motion="kinetic-center-build">Center Build</button>
+      </div>
+
+      <!-- Quick Command Installer Bar -->
       <div class="term-install-box">
-        <code class="term-install-code" id="hero-code-snippet">npx bnb-agent-studio init --track smart-money-era</code>
+        <div class="term-install-code" id="install-snippet">npx bnb-agent-studio init --track smart-money-era</div>
         <div class="term-install-actions">
-          <button class="btn-term btn-term-sm" onclick="copySnippet('hero-code-snippet')" title="Copy Scaffolding Command">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-            </svg>
-            COPY
+          <button class="btn-term btn-term-sm" id="btn-copy-install" title="Copy to clipboard">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+            <span>COPY</span>
           </button>
-          <a href="https://forms.gle/9g9XPNFwnYaHAz9L8" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary" title="Submit Project on Google Form">
-            SUBMIT PROJECT ↗
+          <a href="https://www.bnbchain.org/en/hackathons/smart-money-era?tab=tracks" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary">
+            <span>SUBMIT PROJECT ↗</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- TAB 1: OVERVIEW DASHBOARD -->
-    <section id="tab-overview" class="tui-view active">
-      <!-- 4 Top Metrics -->
+    <!-- ====================================================================
+         VIEW 1: OVERVIEW (/overview)
+         ==================================================================== -->
+    <section class="tui-view active" id="tab-overview">
+      <!-- 4 Metric Cards -->
       <div class="tui-grid-4">
         <div class="tui-metric-card">
           <div class="tui-metric-label">
-            <span>Sprint Progress</span>
-            <span style="color:var(--tui-accent);">[ 📋 ]</span>
+            <span>SPRINT PROGRESS</span>
+            <span>[ 📊 ]</span>
           </div>
-          <div class="tui-metric-num" id="stat-tasks-total">0/0</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);" id="stat-tasks-rate">0% completed</div>
+          <div class="tui-metric-num" id="metric-progress">2/9</div>
+          <div style="font-size:0.72rem; color:var(--tui-text-dim);" id="metric-progress-sub">22% sprint completed</div>
         </div>
 
         <div class="tui-metric-card">
           <div class="tui-metric-label">
-            <span>Critical Checkpoints</span>
-            <span style="color:var(--tui-accent);">[ ⏰ ]</span>
+            <span>CRITICAL CHECKPOINTS</span>
+            <span>[ ⏰ ]</span>
           </div>
-          <div class="tui-metric-num" id="stat-deadlines-count">0</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Submission milestones</div>
+          <div class="tui-metric-num" id="metric-deadlines">4</div>
+          <div style="font-size:0.72rem; color:var(--tui-text-dim);">Submission milestones</div>
         </div>
 
         <div class="tui-metric-card">
           <div class="tui-metric-label">
-            <span>Toolkit & Resources</span>
-            <span style="color:var(--tui-accent);">[ 📚 ]</span>
+            <span>TOOLKIT & RESOURCES</span>
+            <span>[ 📚 ]</span>
           </div>
-          <div class="tui-metric-num" id="stat-resources-count">0</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Docs, APIs & Faucets</div>
+          <div class="tui-metric-num" id="metric-resources">9</div>
+          <div style="font-size:0.72rem; color:var(--tui-text-dim);">Docs, APIs & Faucets</div>
         </div>
 
         <div class="tui-metric-card">
           <div class="tui-metric-label">
-            <span>Squad Engineers</span>
-            <span style="color:var(--tui-accent);">[ 👥 ]</span>
+            <span>SQUAD ENGINEERS</span>
+            <span>[ 👥 ]</span>
           </div>
-          <div class="tui-metric-num" id="stat-team-count">0</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Active collaborators</div>
+          <div class="tui-metric-num" id="metric-team">3</div>
+          <div style="font-size:0.72rem; color:var(--tui-text-dim);">Active collaborators</div>
         </div>
       </div>
 
-      <!-- Split Grid: Deadlines vs Active Tasks -->
+      <!-- Two Windows: Deadlines & Deliverables -->
       <div class="tui-grid-2">
-        <!-- Next Milestones Window -->
+        <!-- Upcoming Deadlines Window -->
         <div class="term-window">
           <div class="term-window-header">
             <div class="term-traffic-lights">
@@ -167,29 +164,15 @@
               <span class="term-dot term-dot-yellow"></span>
               <span class="term-dot term-dot-green"></span>
             </div>
-            <span class="term-window-title">⏰ UPCOMING MILESTONES</span>
-            <button class="btn-term btn-term-sm" onclick="switchTab('deadlines')">TIMELINE ➔</button>
+            <div class="term-window-title">⏰ UPCOMING MILESTONES</div>
+            <button class="btn-term btn-term-sm" data-tab="deadlines">TIMELINE →</button>
           </div>
-          <div class="term-window-body">
-            <div style="overflow-x:auto;">
-              <table class="benchmark-table">
-                <thead>
-                  <tr>
-                    <th>Milestone</th>
-                    <th>Priority</th>
-                    <th>Countdown</th>
-                    <th>Lead</th>
-                  </tr>
-                </thead>
-                <tbody id="overview-deadlines-list">
-                  <tr><td colspan="4" style="text-align:center; color:var(--tui-text-dim);">Loading timeline...</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="term-window-body" id="overview-deadlines-list" style="overflow-x:auto;">
+            <!-- Rendered by JS -->
           </div>
         </div>
 
-        <!-- In Progress Tasks Window -->
+        <!-- Active Deliverables Window -->
         <div class="term-window">
           <div class="term-window-header">
             <div class="term-traffic-lights">
@@ -197,187 +180,134 @@
               <span class="term-dot term-dot-yellow"></span>
               <span class="term-dot term-dot-green"></span>
             </div>
-            <span class="term-window-title">⚡ ACTIVE SPRINT DELIVERABLES</span>
-            <button class="btn-term btn-term-sm" onclick="switchTab('tasks')">KANBAN ➔</button>
+            <div class="term-window-title">⚡ ACTIVE SPRINT DELIVERABLES</div>
+            <button class="btn-term btn-term-sm" data-tab="tasks">KANBAN →</button>
           </div>
-          <div class="term-window-body">
-            <div style="overflow-x:auto;">
-              <table class="benchmark-table">
-                <thead>
-                  <tr>
-                    <th>Deliverable</th>
-                    <th>Assignee</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="overview-tasks-list">
-                  <tr><td colspan="4" style="text-align:center; color:var(--tui-text-dim);">Loading sprint tasks...</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="term-window-body" id="overview-tasks-list" style="overflow-x:auto;">
+            <!-- Rendered by JS -->
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: DEDICATED TRACKS & BOUNTIES HUB -->
-    <section id="tab-tracks" class="tui-view">
-      <!-- Main Track Highlight Banner -->
+    <!-- ====================================================================
+         VIEW 2: TRACKS & BOUNTIES (/tracks)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-tracks">
+      <!-- Main Track Header Banner -->
       <div class="track-banner">
         <div class="track-banner-header">
           <div style="display:flex; align-items:center; gap:0.6rem;">
-            <span class="track-badge-gold">MAIN TRACK</span>
-            <h2 style="font-family:var(--font-serif); font-size:1.8rem; color:var(--tui-text-highlight);">
-              Build the BNB Agent Studio Marketplace ($30,000 USD)
-            </h2>
+            <span class="track-badge-gold">$30,000 USD MAIN TRACK</span>
+            <h2 style="font-family:var(--font-serif); font-size:1.6rem; color:var(--tui-text-highlight);">Build the BNB Agent Studio Marketplace</h2>
           </div>
-          <span class="term-beta-badge" style="font-size:0.8rem; padding:4px 10px;">CANONICAL BSC FRONT DOOR</span>
+          <a href="https://www.bnbchain.org/en/hackathons/smart-money-era?tab=tracks" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary">
+            PORTAL SPECS ↗
+          </a>
         </div>
-        <p style="font-size:0.88rem; color:var(--tui-text-dim); line-height:1.6;">
-          Build the decentralized marketplace for BNB Chain AI agents. Somewhere, users need to find agents, understand what they do, and hire them in a few clicks. The winning submission is officially adopted as the canonical marketplace for BNB Agent Studio!
+        <p style="font-size:0.85rem; color:var(--tui-text-primary); line-height:1.6;">
+          The canonical front door for every agent on BSC. Submissions MUST have equal depth across all 4 core categories. Focus on seamless discovery, 1-click execution, transparent strategy telemetry, and on-chain trust metrics.
         </p>
       </div>
 
-      <!-- 4 Mandatory Categories (Equal Depth) -->
-      <div class="term-window">
-        <div class="term-window-header">
-          <div class="term-traffic-lights">
-            <span class="term-dot term-dot-red"></span>
-            <span class="term-dot term-dot-yellow"></span>
-            <span class="term-dot term-dot-green"></span>
+      <!-- 4 Mandatory Categories Matrix -->
+      <div class="tui-grid-4">
+        <div class="category-card">
+          <div class="category-card-header">
+            <span style="font-size:1.4rem;">⚖️</span>
+            <span class="diff-pill-good">MANDATORY</span>
           </div>
-          <span class="term-window-title">⚖️ 4 MANDATORY FIRST-CLASS AGENT CATEGORIES</span>
-          <span style="font-size:0.75rem; color:var(--tui-text-dim);">[ EQUAL DEPTH REQUIRED ]</span>
+          <h3 class="category-title">1. Rebalancing</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Dynamic LP range management on PancakeSwap v3 / Thena. Auto-resets out-of-range liquidity into optimal tick ranges.
+          </p>
         </div>
-        <div class="term-window-body">
-          <div class="tui-grid-4">
-            <div class="category-card">
-              <div class="category-card-header">
-                <span class="category-title">1. Rebalancing</span>
-                <span class="diff-pill-good">LIVE ON BSC</span>
-              </div>
-              <p style="font-size:0.8rem; color:var(--tui-text-dim);">
-                Manages concentrated LP ranges on DEXes (PancakeSwap v3) and automatically resets out-of-range positions to maximize fee yields.
-              </p>
-              <div style="font-size:0.75rem; color:var(--tui-accent); margin-top:auto; font-weight:600;">
-                ▶ Target: 0.05% - 0.3% Fee Tiers
-              </div>
-            </div>
 
-            <div class="category-card">
-              <div class="category-card-header">
-                <span class="category-title">2. Grid Trading</span>
-                <span class="diff-pill-good">AUTOMATED</span>
-              </div>
-              <p style="font-size:0.8rem; color:var(--tui-text-dim);">
-                Places and continuously manages automated buy low / sell high grid orders across high-volatility BSC tokens (BNB, CAKE, BTCB).
-              </p>
-              <div style="font-size:0.75rem; color:var(--tui-accent); margin-top:auto; font-weight:600;">
-                ▶ Target: Dynamic Geometric Grid
-              </div>
-            </div>
-
-            <div class="category-card">
-              <div class="category-card-header">
-                <span class="category-title">3. Yield Optimisation</span>
-                <span class="diff-pill-good">SMART ROUTING</span>
-              </div>
-              <p style="font-size:0.8rem; color:var(--tui-text-dim);">
-                Continuously scans lending protocols and liquidity pools (Venus, Lista, Aave) to route capital to the highest risk-adjusted APR.
-              </p>
-              <div style="font-size:0.75rem; color:var(--tui-accent); margin-top:auto; font-weight:600;">
-                ▶ Target: Max APY with Gas Offset
-              </div>
-            </div>
-
-            <div class="category-card">
-              <div class="category-card-header">
-                <span class="category-title">4. Health Factor</span>
-                <span class="diff-pill-good">PROTECTION</span>
-              </div>
-              <p style="font-size:0.8rem; color:var(--tui-text-dim);">
-                Monitors collateral ratios 24/7 on lending markets to automatically repay debt or inject collateral before liquidation cascades occur.
-              </p>
-              <div style="font-size:0.75rem; color:var(--tui-accent); margin-top:auto; font-weight:600;">
-                ▶ Target: HF > 1.45 Auto-Defense
-              </div>
-            </div>
+        <div class="category-card">
+          <div class="category-card-header">
+            <span style="font-size:1.4rem;">📊</span>
+            <span class="diff-pill-good">MANDATORY</span>
           </div>
+          <h3 class="category-title">2. Grid Trading</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Automated buy-low / sell-high grid order execution across volatile BNB pairs with customizable geometric spacing.
+          </p>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card-header">
+            <span style="font-size:1.4rem;">🚀</span>
+            <span class="diff-pill-good">MANDATORY</span>
+          </div>
+          <h3 class="category-title">3. Yield Optimisation</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Continuous liquidity routing across Venus, Lista DAO, and Aave v3 to maximize net APY with risk-adjusted scoring.
+          </p>
+        </div>
+
+        <div class="category-card">
+          <div class="category-card-header">
+            <span style="font-size:1.4rem;">🛡️</span>
+            <span class="diff-pill-good">MANDATORY</span>
+          </div>
+          <h3 class="category-title">4. Health Factor</h3>
+          <p style="font-size:0.78rem; color:var(--tui-text-dim);">
+            Autonomous loan health monitoring. Automatically triggers emergency debt repayment or collateral flash-topup before liquidation.
+          </p>
         </div>
       </div>
 
-      <!-- TERMIX CHALLENGE ($10K) - AGENT ADVANTAGE REPORT -->
-      <div class="term-window">
-        <div class="term-window-header">
-          <div class="term-traffic-lights">
-            <span class="term-dot term-dot-red"></span>
-            <span class="term-dot term-dot-yellow"></span>
-            <span class="term-dot term-dot-green"></span>
+      <!-- Partner Bounties Grid -->
+      <div class="tui-grid-2">
+        <!-- TermiX Challenge & Agent Advantage Report -->
+        <div class="term-window">
+          <div class="term-window-header">
+            <div class="term-traffic-lights">
+              <span class="term-dot term-dot-red"></span>
+              <span class="term-dot term-dot-yellow"></span>
+              <span class="term-dot term-dot-green"></span>
+            </div>
+            <div class="term-window-title">⚡ TERMIX CHALLENGE ($10,000 USD) // ADVANTAGE REPORT</div>
+            <span class="diff-pill-good">REQUIRED DELIVERABLE</span>
           </div>
-          <span class="term-window-title">📊 TERMIX CHALLENGE ($10,000) // AGENT ADVANTAGE REPORT</span>
-          <span class="term-beta-badge">MANDATORY SUBMISSION ARTIFACT</span>
-        </div>
-        <div class="term-window-body">
-          <p style="font-size:0.82rem; color:var(--tui-text-dim);">
-            TermiX judges whether hiring an agent on your marketplace actually beats doing the job manually. Below is our live benchmark comparing 3 real execution tasks:
-          </p>
-
-          <div style="overflow-x:auto;">
+          <div class="term-window-body">
+            <p style="font-size:0.8rem; color:var(--tui-text-primary);">
+              Submissions must validate agent superiority through the <strong>Agent Advantage Report</strong> (benchmarking 3 real tasks with vs. without AI agent):
+            </p>
             <table class="benchmark-table">
               <thead>
                 <tr>
                   <th>Benchmark Task</th>
-                  <th>Manual Execution</th>
-                  <th>AI Agent Execution</th>
-                  <th>Time Delta</th>
-                  <th>Cost Efficiency</th>
-                  <th>Quality Score</th>
+                  <th>Manual Flow</th>
+                  <th>With AI Agent</th>
+                  <th>Advantage</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>
-                    <strong>1. Cross-DEX Arbitrage & Swap Route</strong><br>
-                    <span style="font-size:0.72rem; color:var(--tui-text-dim);">[Trading / High-Stakes]</span>
-                  </td>
-                  <td>14m 20s (Manual slip calc)</td>
-                  <td><strong>1.2s</strong> (PancakeSwap Router)</td>
-                  <td><span class="diff-pill-good">-99.8% Time</span></td>
-                  <td><span class="diff-pill-good">-42% Gas</span></td>
-                  <td><strong>98/100</strong> (Zero slippage loss)</td>
+                  <td><strong>DEX Concentrated LP Rebalance</strong></td>
+                  <td>14.2 min (Manual Tick Analysis)</td>
+                  <td>1.8 sec (Automated Trigger)</td>
+                  <td><span class="diff-pill-good">99.8% Faster</span></td>
                 </tr>
                 <tr>
-                  <td>
-                    <strong>2. PancakeSwap v3 Dynamic Range Reset</strong><br>
-                    <span style="font-size:0.72rem; color:var(--tui-text-dim);">[DeFi Liquidity Management]</span>
-                  </td>
-                  <td>45m (Manual position teardown)</td>
-                  <td><strong>3.5s</strong> (Sub-tick rebalance)</td>
-                  <td><span class="diff-pill-good">-99.2% Time</span></td>
-                  <td><span class="diff-pill-good">+28% Net Yield</span></td>
-                  <td><strong>95/100</strong> (Optimum fee capture)</td>
+                  <td><strong>Multi-Protocol Yield Routing</strong></td>
+                  <td>$1.85 Gas + 0.4% Slippage</td>
+                  <td>$0.42 Gas (Batch Route)</td>
+                  <td><span class="diff-pill-good">-77% Cost</span></td>
                 </tr>
                 <tr>
-                  <td>
-                    <strong>3. Smart Contract Health & Risk Scan</strong><br>
-                    <span style="font-size:0.72rem; color:var(--tui-text-dim);">[Security / Liquidation Defense]</span>
-                  </td>
-                  <td>2h 15m (Manual parameter check)</td>
-                  <td><strong>4.1s</strong> (8004scan verification)</td>
-                  <td><span class="diff-pill-good">-99.7% Time</span></td>
-                  <td><span class="diff-pill-good">100% Loss Saved</span></td>
-                  <td><strong>99/100</strong> (Instant auto-repay)</td>
+                  <td><strong>Liquidation Avoidance Topup</strong></td>
+                  <td>45 min (High Liquidation Risk)</td>
+                  <td>Sub-block (Zero Liquidations)</td>
+                  <td><span class="diff-pill-good">100% Defense</span></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
 
-      <!-- ALTANA & PANCAKESWAP CHALLENGES -->
-      <div class="tui-grid-2">
-        <!-- Altana Sovereign Agents -->
+        <!-- Altana Sovereign Session Keys & PancakeSwap -->
         <div class="term-window">
           <div class="term-window-header">
             <div class="term-traffic-lights">
@@ -385,45 +315,35 @@
               <span class="term-dot term-dot-yellow"></span>
               <span class="term-dot term-dot-green"></span>
             </div>
-            <span class="term-window-title">🔑 ALTANA CHALLENGE (50,000 XP)</span>
-            <span class="diff-pill-good">SOVEREIGN AGENTS</span>
+            <div class="term-window-title">🔑 ALTANA & PANCAKESWAP CHALLENGES</div>
+            <span class="diff-pill-good">50K XP + 1K CAKE</span>
           </div>
-          <div class="term-window-body" style="font-size:0.8rem; color:var(--tui-text-dim);">
-            <p>Self-custodial sovereign agents on Altana wallets with scoped session keys registered in the public on-chain Keystore registry.</p>
-            <div style="background:var(--tui-surface-subtle); padding:0.6rem; border-radius:8px; border:1px solid var(--tui-border); font-family:var(--font-mono); font-size:0.75rem;">
-              <div>• Call Allowlist: <code>[PancakeSwapV3Router, VenusVault]</code></div>
-              <div>• Max Spend Cap: <code>5.0 BNB / session</code></div>
-              <div>• Expiry: <code>2026-09-09T23:59:59Z</code></div>
-              <div>• User Revocation: <code>1-Tx Instant On-Chain Revoke</code></div>
+          <div class="term-window-body">
+            <div style="background:var(--tui-surface-subtle); padding:0.75rem; border-radius:8px; border:1px solid var(--tui-border);">
+              <div style="font-weight:700; color:var(--tui-accent); margin-bottom:0.25rem;">Altana Session Key Security Model:</div>
+              <p style="font-size:0.78rem; color:var(--tui-text-primary);">
+                Agents operate self-custodially on own Altana smart wallets. Session keys are strictly scoped with:
+                <br>• <strong>Target Contract Allowlist</strong> (PancakeSwap Router only)
+                <br>• <strong>Spend Limit Caps</strong> (Max 2.5 BNB per 24h cycle)
+                <br>• <strong>Granular Expiry</strong> (Auto-revoked after 7 days)
+              </p>
             </div>
-          </div>
-        </div>
 
-        <!-- 8004scan & PancakeSwap -->
-        <div class="term-window">
-          <div class="term-window-header">
-            <div class="term-traffic-lights">
-              <span class="term-dot term-dot-red"></span>
-              <span class="term-dot term-dot-yellow"></span>
-              <span class="term-dot term-dot-green"></span>
-            </div>
-            <span class="term-window-title">🥞 PANCAKESWAP (1,000 CAKE) & 8004SCAN</span>
-            <span class="diff-pill-good">PRO-TIER API</span>
-          </div>
-          <div class="term-window-body" style="font-size:0.8rem; color:var(--tui-text-dim);">
-            <p>Direct integration with PancakeSwap v3 liquidity routing + 8004scan Pro developer API (500 req/min, 100,000 req/day) for ERC-8004 agent trust metadata.</p>
-            <div style="background:var(--tui-surface-subtle); padding:0.6rem; border-radius:8px; border:1px solid var(--tui-border); font-family:var(--font-mono); font-size:0.75rem;">
-              <div>• 8004scan Registered Agents: <code>>200,000 on BSC</code></div>
-              <div>• PancakeSwap Pools Monitored: <code>18 Active Pairs</code></div>
-              <div>• Gas Cost Optimization: <code>Dynamic Sub-Routing</code></div>
+            <div style="background:var(--tui-surface-subtle); padding:0.75rem; border-radius:8px; border:1px solid var(--tui-border); margin-top:0.5rem;">
+              <div style="font-weight:700; color:var(--tui-green); margin-bottom:0.25rem;">PancakeSwap v3 & 8004scan API:</div>
+              <p style="font-size:0.78rem; color:var(--tui-text-primary);">
+                Includes 8004scan Pro API (500 req/min, 100k req/day) for agent trust scoring, verified metadata, and BSC Testnet faucet access.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: DEADLINES & TIMELINE VIEW -->
-    <section id="tab-deadlines" class="tui-view">
+    <!-- ====================================================================
+         VIEW 3: DEADLINES (/deadlines)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-deadlines">
       <div class="term-window">
         <div class="term-window-header">
           <div class="term-traffic-lights">
@@ -431,332 +351,235 @@
             <span class="term-dot term-dot-yellow"></span>
             <span class="term-dot term-dot-green"></span>
           </div>
-          <span class="term-window-title">⏰ HACKATHON MILESTONES & HARD DEADLINES</span>
-          <button class="btn-term btn-term-sm btn-term-primary" onclick="openModal('deadline')">+ ADD MILESTONE</button>
+          <div class="term-window-title">⏰ OFFICIAL HACKATHON TIMELINE & MILESTONES</div>
+          <button class="btn-term btn-term-sm btn-term-primary" id="btn-create-deadline">+ MILESTONE</button>
         </div>
         <div class="term-window-body">
-          <div style="overflow-x:auto;">
-            <table class="benchmark-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Milestone Title & Scope</th>
-                  <th>Due Date (UTC)</th>
-                  <th>Countdown</th>
-                  <th>Priority</th>
-                  <th>Status</th>
-                  <th>Lead</th>
-                  <th style="text-align:right;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="deadlines-container">
-                <!-- Injected dynamically -->
-              </tbody>
-            </table>
+          <div id="deadlines-container" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <!-- Rendered by JS -->
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 4: TASKS KANBAN VIEW -->
-    <section id="tab-tasks" class="tui-view">
-      <!-- Filter Bar -->
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:0.8rem; color:var(--tui-text-dim); font-weight:700;">FILTER:</span>
-          <select id="task-assignee-filter" class="tui-select" style="width:auto; min-width:140px;">
-            <option value="all">ALL ASSIGNEES</option>
-          </select>
-          <select id="task-priority-filter" class="tui-select" style="width:auto; min-width:130px;">
-            <option value="all">ALL PRIORITIES</option>
-            <option value="CRITICAL">CRITICAL</option>
-            <option value="HIGH">HIGH</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="LOW">LOW</option>
-          </select>
-        </div>
-        <button class="btn-term btn-term-primary" onclick="openModal('task')">+ NEW SPRINT TASK</button>
-      </div>
-
-      <!-- 3-Column Kanban Board -->
-      <div class="tui-grid-3">
-        <!-- TODO -->
-        <div class="task-kanban-col">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:0.85rem;">
-            <span>📝 [TODO]</span>
-            <span class="tui-beta-badge" id="count-todo">0</span>
+    <!-- ====================================================================
+         VIEW 4: SPRINT KANBAN (/tasks)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-tasks">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
           </div>
-          <div id="kanban-col-todo" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
-        </div>
-
-        <!-- IN PROGRESS -->
-        <div class="task-kanban-col">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:0.85rem;">
-            <span>⚡ [IN PROGRESS]</span>
-            <span class="tui-beta-badge" id="count-in-progress">0</span>
+          <div class="term-window-title">⚡ SPRINT DELIVERABLES KANBAN</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <select class="tui-select" id="task-filter-assignee" style="width:160px; padding:0.2rem 0.4rem; font-size:0.72rem;">
+              <option value="ALL">All Assignees</option>
+            </select>
+            <button class="btn-term btn-term-sm btn-term-primary" id="btn-add-task-inline">+ NEW TASK</button>
           </div>
-          <div id="kanban-col-in-progress" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
         </div>
-
-        <!-- DONE -->
-        <div class="task-kanban-col">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:0.85rem;">
-            <span>✅ [COMPLETED]</span>
-            <span class="tui-beta-badge" id="count-done">0</span>
-          </div>
-          <div id="kanban-col-done" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 5: RESOURCES VIEW -->
-    <section id="tab-resources" class="tui-view">
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:0.5rem; flex:1; max-width:500px;">
-          <select id="resource-type-filter" class="tui-select" style="width:auto;">
-            <option value="all">ALL RESOURCE TYPES</option>
-            <option value="DOCUMENT">DOCUMENT</option>
-            <option value="LINK">LINK</option>
-            <option value="NOTE">NOTE</option>
-            <option value="FILE">FILE</option>
-          </select>
-          <input type="text" id="resource-tag-filter" class="tui-input" placeholder="Filter by #tag...">
-        </div>
-        <button class="btn-term btn-term-primary" onclick="openModal('resource')">+ ADD RESOURCE</button>
-      </div>
-
-      <div class="tui-grid-3" id="resources-container">
-        <!-- Injected dynamically -->
-      </div>
-    </section>
-
-    <!-- TAB 6: TEAM VIEW -->
-    <section id="tab-team" class="tui-view">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <span style="font-size:0.85rem; color:var(--tui-text-dim); font-weight:700;">👥 SQUAD ARCHITECTURE & TASK ALLOCATION</span>
-        <button class="btn-term btn-term-primary" onclick="openModal('team')">+ ADD SQUAD MEMBER</button>
-      </div>
-      <div class="tui-grid-3" id="team-container">
-        <!-- Injected dynamically -->
-      </div>
-    </section>
-
-    <!-- TAB 7: PGBOT OBSERVABILITY VIEW -->
-    <section id="tab-observability" class="tui-view">
-      <!-- Database Metrics Row -->
-      <div class="tui-grid-4">
-        <div class="tui-metric-card">
-          <div class="tui-metric-label">Database Engine</div>
-          <div class="tui-metric-num" id="pg-metric-version" style="font-size:1.3rem;">PostgreSQL 18.6</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Prisma ORM Connected</div>
-        </div>
-
-        <div class="tui-metric-card">
-          <div class="tui-metric-label">Database Size</div>
-          <div class="tui-metric-num" id="pg-metric-size">--</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Disk footprint</div>
-        </div>
-
-        <div class="tui-metric-card">
-          <div class="tui-metric-label">Buffer Cache Hit Ratio</div>
-          <div class="tui-metric-num" id="pg-metric-cache" style="color:var(--tui-green);">100%</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Memory cache efficiency</div>
-        </div>
-
-        <div class="tui-metric-card">
-          <div class="tui-metric-label">Connection Pool</div>
-          <div class="tui-metric-num" id="pg-metric-conns">--</div>
-          <div style="font-size:0.75rem; color:var(--tui-text-dim);">Active / idle connections</div>
-        </div>
-      </div>
-
-      <!-- Split Grid: Active Queries & Vacuum -->
-      <div class="tui-grid-2">
-        <div class="term-window">
-          <div class="term-window-header">
-            <div class="term-traffic-lights">
-              <span class="term-dot term-dot-red"></span>
-              <span class="term-dot term-dot-yellow"></span>
-              <span class="term-dot term-dot-green"></span>
+        <div class="term-window-body">
+          <div class="tui-grid-3" style="gap:1rem;">
+            <!-- Column 1: TODO -->
+            <div class="task-kanban-col">
+              <div style="display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:0.78rem; color:var(--tui-text-dim);">
+                <span>TO DO</span>
+                <span class="diff-pill-good" id="count-todo">0</span>
+              </div>
+              <div id="tasks-todo-list" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
             </div>
-            <span class="term-window-title">📊 ACTIVE QUERIES & STATS</span>
-            <button class="btn-term btn-term-sm" onclick="fetchPgbotStats()">↻ REFRESH</button>
-          </div>
-          <div class="term-window-body">
-            <div style="overflow-x:auto;">
-              <table class="benchmark-table">
-                <thead>
-                  <tr>
-                    <th>PID</th>
-                    <th>User</th>
-                    <th>State</th>
-                    <th>Runtime</th>
-                    <th>Query Snippet</th>
-                  </tr>
-                </thead>
-                <tbody id="pg-queries-body">
-                  <tr><td colspan="5" style="text-align:center; color:var(--tui-text-dim);">Inspecting queries...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
-        <div class="term-window">
-          <div class="term-window-header">
-            <div class="term-traffic-lights">
-              <span class="term-dot term-dot-red"></span>
-              <span class="term-dot term-dot-yellow"></span>
-              <span class="term-dot term-dot-green"></span>
+            <!-- Column 2: IN PROGRESS -->
+            <div class="task-kanban-col">
+              <div style="display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:0.78rem; color:var(--tui-accent);">
+                <span>IN PROGRESS</span>
+                <span class="diff-pill-good" id="count-in-progress">0</span>
+              </div>
+              <div id="tasks-in-progress-list" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
             </div>
-            <span class="term-window-title">🧹 TABLE VACUUM & DEAD TUPLES</span>
-            <span style="font-size:0.75rem; color:var(--tui-text-dim);">Prisma Models</span>
-          </div>
-          <div class="term-window-body">
-            <div style="overflow-x:auto;">
-              <table class="benchmark-table">
-                <thead>
-                  <tr>
-                    <th>Table</th>
-                    <th>Live Tuples</th>
-                    <th>Dead Tuples</th>
-                    <th>Dead Ratio</th>
-                  </tr>
-                </thead>
-                <tbody id="pg-vacuum-body">
-                  <tr><td colspan="4" style="text-align:center; color:var(--tui-text-dim);">Analyzing vacuum metrics...</td></tr>
-                </tbody>
-              </table>
+
+            <!-- Column 3: COMPLETED -->
+            <div class="task-kanban-col">
+              <div style="display:flex; align-items:center; justify-content:space-between; font-weight:700; font-size:0.78rem; color:var(--tui-green);">
+                <span>COMPLETED</span>
+                <span class="diff-pill-good" id="count-completed">0</span>
+              </div>
+              <div id="tasks-completed-list" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 8: TERMINAL RADIO (TERM-V0 INTEGRATED) -->
-    <section id="tab-radio" class="tui-view">
-      <div class="tui-grid-2">
-        <!-- Radio Stations Table -->
-        <div class="term-window">
-          <div class="term-window-header">
-            <div class="term-traffic-lights">
-              <span class="term-dot term-dot-red"></span>
-              <span class="term-dot term-dot-yellow"></span>
-              <span class="term-dot term-dot-green"></span>
-            </div>
-            <span class="term-window-title">📻 TOP 30 GLOBAL RADIO STATIONS</span>
-            <span id="radio-station-count" style="font-size:0.75rem; color:var(--tui-text-dim);">[ 0/30 LOADED ]</span>
+    <!-- ====================================================================
+         VIEW 5: NEO FLEXBOX LABS (/flexbox) - CLONED FROM PRAZZON/FLEXBOX-LABS
+         ==================================================================== -->
+    <section class="tui-view" id="tab-flexbox">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
           </div>
-          <div class="term-window-body">
-            <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-              <input type="text" class="tui-input" id="radio-search-input" placeholder="Search station, genre, country...">
-              <select class="tui-select" id="radio-country-filter" style="width:auto;">
-                <option value="ALL">ALL COUNTRIES</option>
-              </select>
-              <button class="btn-term btn-term-sm" onclick="fetchRadioStations()">↻</button>
-            </div>
-            <div style="overflow-x:auto; max-height:380px;">
-              <table class="benchmark-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Station Name</th>
-                    <th>Country</th>
-                    <th>Codec</th>
-                    <th>Bitrate</th>
-                    <th>Clicks</th>
-                  </tr>
-                </thead>
-                <tbody id="radio-table-body">
-                  <tr><td colspan="6" style="text-align:center; color:var(--tui-text-dim);">Connecting to Radio Browser API...</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="term-window-title">📐 NEO FLEXBOX LABS // VISUAL CSS PLAYGROUND</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span class="diff-pill-good">LIVE INTERACTIVE</span>
           </div>
         </div>
+        <div class="term-window-body" style="padding:0.75rem;">
+          <!-- Mount point for FlexboxLabs -->
+          <div id="neo-flex-playground"></div>
+        </div>
+      </div>
+    </section>
 
-        <!-- Oscilloscope Visualizer & Stream Inspector -->
-        <div class="term-window">
-          <div class="term-window-header">
-            <div class="term-traffic-lights">
-              <span class="term-dot term-dot-red"></span>
-              <span class="term-dot term-dot-yellow"></span>
-              <span class="term-dot term-dot-green"></span>
-            </div>
-            <span class="term-window-title">📡 STREAM URL INSPECTOR & RECEIVER</span>
-            <span id="radio-player-indicator" style="font-size:0.75rem; color:var(--tui-text-dim);">[ STANDBY ]</span>
+    <!-- ====================================================================
+         VIEW 6: RESOURCES & TOOLKIT (/resources)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-resources">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
           </div>
-          <div class="term-window-body">
-            <!-- Canvas Visualizer -->
-            <div style="border:1px solid var(--tui-border); background:rgba(0,0,0,0.6); border-radius:10px; padding:0.5rem;">
-              <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--tui-text-dim); margin-bottom:0.25rem;">
-                <span>SPECTRUM ANALYZER // AUDIO OSCILLOSCOPE</span>
-                <span id="radio-audio-freq">CH-1: 44.1 kHz</span>
-              </div>
-              <canvas id="radio-canvas-visualizer" style="width:100%; height:75px; display:block;"></canvas>
-            </div>
-
-            <!-- Controls -->
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; border:1px solid var(--tui-border); border-radius:10px; padding:0.6rem; background:var(--tui-surface-subtle);">
-              <div style="display:flex; gap:0.4rem;">
-                <button class="btn-term btn-term-primary" id="btn-radio-play" onclick="toggleRadioPlay()">▶ TUNE IN</button>
-                <button class="btn-term" onclick="stopRadioStream()">■ MUTE</button>
-                <button class="btn-term" onclick="playRandomRadioStation()">⚄ RANDOM</button>
-              </div>
-              <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.8rem;">
-                <span>VOL:</span>
-                <input type="range" id="radio-vol-slider" min="0" max="1" step="0.05" value="0.8" style="width:80px; accent-color:var(--tui-accent);" oninput="setRadioVolume(this.value)">
-                <span id="radio-vol-label">80%</span>
-              </div>
-            </div>
-
-            <!-- Stream URL Highlight Box -->
-            <div style="border:1px solid var(--tui-border-accent); border-radius:10px; background:var(--tui-surface); padding:0.75rem; display:flex; flex-direction:column; gap:0.4rem;">
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--tui-text-dim); font-weight:700;">
-                <span>▶ DIRECT AUDIO STREAM URL</span>
-                <button class="btn-term btn-term-sm" onclick="copyRadioStreamUrl()">[ 📋 COPY URL ]</button>
-              </div>
-              <div id="radio-stream-url-display" style="font-size:0.8rem; color:var(--tui-text-highlight); background:rgba(0,0,0,0.5); padding:0.5rem; border-radius:6px; border:1px dashed var(--tui-border); word-break:break-all;">
-                -- SELECT A STATION --
-              </div>
-              <div style="display:flex; gap:0.4rem; justify-content:flex-end;">
-                <button class="btn-term btn-term-sm" onclick="openRawRadioStream()">OPEN RAW STREAM ↗</button>
-                <button class="btn-term btn-term-sm" onclick="copyRadioCurl()">COPY CURL SNIPPET</button>
-              </div>
-            </div>
+          <div class="term-window-title">📚 HACKATHON TOOLKIT & OFFICIAL RESOURCES</div>
+          <button class="btn-term btn-term-sm btn-term-primary" id="btn-create-resource">+ RESOURCE</button>
+        </div>
+        <div class="term-window-body">
+          <div class="tui-grid-3" id="resources-grid">
+            <!-- Rendered by JS -->
           </div>
         </div>
       </div>
     </section>
 
-    <!-- BOTTOM INTERACTIVE CLI FOOTER PROMPT -->
+    <!-- ====================================================================
+         VIEW 7: SQUAD MATRIX (/team)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-team">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
+          </div>
+          <div class="term-window-title">👥 SQUAD ENGINEERS & WORKLOAD MATRIX</div>
+          <button class="btn-term btn-term-sm btn-term-primary" id="btn-create-member">+ MEMBER</button>
+        </div>
+        <div class="term-window-body">
+          <div class="tui-grid-3" id="team-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 8: PGBOT OBSERVABILITY (/pgbot)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-observability">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
+          </div>
+          <div class="term-window-title">📡 PGBOT // POSTGRESQL REAL-TIME TELEMETRY</div>
+          <button class="btn-term btn-term-sm" id="btn-refresh-pgbot">REFRESH ↻</button>
+        </div>
+        <div class="term-window-body">
+          <div class="tui-grid-4">
+            <div class="tui-metric-card">
+              <div class="tui-metric-label">CACHE HIT RATIO</div>
+              <div class="tui-metric-num" id="pg-cache-ratio">100%</div>
+              <div style="font-size:0.7rem; color:var(--tui-green);">Optimal cache buffer efficiency</div>
+            </div>
+            <div class="tui-metric-card">
+              <div class="tui-metric-label">ACTIVE CONNECTIONS</div>
+              <div class="tui-metric-num" id="pg-active-conns">3</div>
+              <div style="font-size:0.7rem; color:var(--tui-text-dim);">PostgreSQL 18.6 connection pool</div>
+            </div>
+            <div class="tui-metric-card">
+              <div class="tui-metric-label">DATABASE SIZE</div>
+              <div class="tui-metric-num" id="pg-db-size">8046 kB</div>
+              <div style="font-size:0.7rem; color:var(--tui-text-dim);">Prisma schema tables</div>
+            </div>
+            <div class="tui-metric-card">
+              <div class="tui-metric-label">ACTIVE QUERIES</div>
+              <div class="tui-metric-num" id="pg-active-queries">0</div>
+              <div style="font-size:0.7rem; color:var(--tui-green);">Zero query deadlocks</div>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem;">
+            <div class="term-window-title" style="margin-bottom:0.5rem;">DATABASE INTROSPECTION DUMP</div>
+            <pre id="pgbot-raw-inspect" style="background:#000; border:1px solid var(--tui-border); padding:0.75rem; border-radius:8px; font-size:0.75rem; color:#10b981; overflow-x:auto; max-height:280px;"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 9: RADIO STREAMER (/radio)
+         ==================================================================== -->
+    <section class="tui-view" id="tab-radio">
+      <div class="term-window">
+        <div class="term-window-header">
+          <div class="term-traffic-lights">
+            <span class="term-dot term-dot-red"></span>
+            <span class="term-dot term-dot-yellow"></span>
+            <span class="term-dot term-dot-green"></span>
+          </div>
+          <div class="term-window-title">📻 GLOBAL RADIO // AUDIO OSCILLOSCOPE</div>
+          <span class="diff-pill-good" id="radio-live-status">STANDBY</span>
+        </div>
+        <div class="term-window-body">
+          <!-- Oscilloscope Canvas -->
+          <div style="background:#000; border:1px solid var(--tui-border-strong); border-radius:12px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+            <canvas id="radio-oscilloscope" width="800" height="120" style="width:100%; height:120px; border-radius:6px; background:#040905;"></canvas>
+            <div style="display:flex; align-items:center; justify-content:space-between; width:100%; padding:0 0.5rem; font-size:0.78rem;">
+              <span id="radio-current-station" style="font-weight:700; color:var(--tui-text-highlight);">Select a station below to stream</span>
+              <button class="btn-term btn-term-sm btn-term-primary" id="btn-radio-toggle-play">▶ PLAY STREAM</button>
+            </div>
+          </div>
+
+          <!-- Station Selector Grid -->
+          <div class="tui-grid-3" id="radio-stations-grid" style="margin-top:0.5rem;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM INTERACTIVE CLI PROMPT -->
     <footer class="term-cli-footer">
-      <span class="term-cli-prompt">user@term-v0:~$</span>
-      <input type="text" class="term-cli-input" id="tui-cli-input" placeholder="Type command: 1-8, tracks, report, tasks, deadlines, theme [amber|green|cyan|slate], crt, radio, or ? for help...">
-      <div style="display:flex; align-items:center; gap:0.6rem; font-size:0.75rem; color:var(--tui-text-dim);">
-        <span><strong style="color:var(--tui-text-highlight);">1-8</strong> Views</span>
-        <span><strong style="color:var(--tui-text-highlight);">T</strong> Theme</span>
-        <span><strong style="color:var(--tui-text-highlight);">ESC</strong> Close</span>
-      </div>
+      <span class="term-cli-prompt">user@bnb-agent:~$</span>
+      <input type="text" class="term-cli-input" id="cli-command-input" placeholder="Type commands: 'tracks', 'tasks', 'flexbox', 'deadlines', 'theme <amber|green|cyan|slate>', 'crt', 'seed', '1-9'..." autocomplete="off">
     </footer>
-  </div>
+  </main>
 
-  <!-- UNIVERSAL TUI MODAL DIALOG -->
-  <div class="tui-modal-backdrop" id="universal-modal">
-    <div class="tui-modal">
+  <!-- REUSABLE MODAL DIALOG -->
+  <div class="tui-modal-backdrop" id="tui-modal-backdrop">
+    <div class="tui-modal" id="tui-modal-container">
       <div class="term-window-header">
         <div class="term-traffic-lights">
-          <span class="term-dot term-dot-red" onclick="closeModal()"></span>
+          <span class="term-dot term-dot-red"></span>
           <span class="term-dot term-dot-yellow"></span>
           <span class="term-dot term-dot-green"></span>
         </div>
-        <span class="term-window-title" id="modal-title">> EDIT ITEM</span>
-        <button class="btn-term btn-term-sm" onclick="closeModal()">✕</button>
+        <div class="term-window-title" id="modal-title">MODAL</div>
+        <button class="btn-term btn-term-sm" id="modal-close-btn">✕</button>
       </div>
-      <div class="term-window-body" id="modal-body"></div>
-      <div style="padding:0.75rem 1rem; border-top:1px solid var(--tui-border); display:flex; justify-content:flex-end; gap:0.5rem; background:var(--tui-surface-subtle);">
-        <button class="btn-term" onclick="closeModal()">CANCEL [ESC]</button>
-        <button class="btn-term btn-term-primary" id="modal-save-btn">SAVE / EXECUTE [ENTER]</button>
+      <div class="term-window-body" id="modal-body">
+        <!-- Injected dynamically -->
       </div>
     </div>
   </div>
@@ -764,9 +587,7 @@
   <!-- TOAST NOTIFICATION -->
   <div class="tui-toast" id="tui-toast"></div>
 
-  <!-- HTML5 AUDIO PLAYER -->
-  <audio id="tui-radio-audio" preload="none" crossorigin="anonymous"></audio>
-
+  <!-- CLIENT SCRIPTS -->
   <script type="module" src="/js/app.js"></script>
 </body>
 </html>

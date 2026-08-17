@@ -1,6 +1,6 @@
 /* ==========================================================================
-   TERM-v0 // MASTER DESIGN SYSTEM & RETRO-FUTURISTIC TERMINAL UI
-   Inspired by term-v0.app, vintage Macintosh, and phosphor CRT aesthetics
+   BNB CHAIN // SMART MONEY ERA & NEO FLEXBOX LABS MASTER DESIGN SYSTEM
+   Featuring pixel-point/animate-text Kinetic Typography & Neo-Brutalist UI
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
@@ -9,7 +9,7 @@
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
   
-  /* Palette 1: Amber Phosphor (Default term-v0 dark) */
+  /* Palette 1: Amber Phosphor (Default Dark) */
   --tui-bg: #090806;
   --tui-surface: #12100b;
   --tui-surface-subtle: #1a1710;
@@ -34,9 +34,12 @@
   --tui-cyan: #06b6d4;
   --tui-purple: #a855f7;
 
-  --nav-bg: rgba(18, 16, 11, 0.85);
-  --nav-border: rgba(77, 63, 37, 0.5);
-  --card-bg: rgba(18, 16, 11, 0.7);
+  --nav-bg: rgba(18, 16, 11, 0.88);
+  --nav-border: rgba(77, 63, 37, 0.55);
+  --card-bg: rgba(18, 16, 11, 0.75);
+
+  --neo-shadow: 3px 3px 0px rgba(0, 0, 0, 0.85);
+  --neo-shadow-accent: 3px 3px 0px var(--tui-accent);
 }
 
 /* Palette 2: Matrix Green */
@@ -59,9 +62,12 @@
   --tui-glow: 0 0 12px rgba(16, 185, 129, 0.25);
   --tui-glow-strong: 0 0 24px rgba(16, 185, 129, 0.45);
   
-  --nav-bg: rgba(10, 20, 13, 0.85);
-  --nav-border: rgba(35, 84, 54, 0.5);
-  --card-bg: rgba(10, 20, 13, 0.7);
+  --nav-bg: rgba(10, 20, 13, 0.88);
+  --nav-border: rgba(35, 84, 54, 0.55);
+  --card-bg: rgba(10, 20, 13, 0.75);
+
+  --neo-shadow: 3px 3px 0px rgba(0, 0, 0, 0.85);
+  --neo-shadow-accent: 3px 3px 0px #10b981;
 }
 
 /* Palette 3: Cyber Cyan */
@@ -84,19 +90,22 @@
   --tui-glow: 0 0 12px rgba(6, 182, 212, 0.25);
   --tui-glow-strong: 0 0 24px rgba(6, 182, 212, 0.45);
   
-  --nav-bg: rgba(10, 19, 27, 0.85);
-  --nav-border: rgba(33, 79, 112, 0.5);
-  --card-bg: rgba(10, 19, 27, 0.7);
+  --nav-bg: rgba(10, 19, 27, 0.88);
+  --nav-border: rgba(33, 79, 112, 0.55);
+  --card-bg: rgba(10, 19, 27, 0.75);
+
+  --neo-shadow: 3px 3px 0px rgba(0, 0, 0, 0.85);
+  --neo-shadow-accent: 3px 3px 0px #06b6d4;
 }
 
-/* Palette 4: Macintosh Clean Slate (Light / Modern Term-v0) */
+/* Palette 4: Neo Light Slate */
 [data-theme="slate"] {
   --tui-bg: #f4f4f5;
   --tui-surface: #ffffff;
   --tui-surface-subtle: #ececec;
   --tui-border: #d4d4d8;
-  --tui-border-strong: #a1a1aa;
-  --tui-border-accent: #18181b;
+  --tui-border-strong: #18181b;
+  --tui-border-accent: #000000;
   
   --tui-text-primary: #18181b;
   --tui-text-dim: #71717a;
@@ -109,12 +118,15 @@
   --tui-glow: none;
   --tui-glow-strong: 0 10px 30px rgba(0, 0, 0, 0.08);
   
-  --nav-bg: rgba(236, 236, 236, 0.85);
-  --nav-border: rgba(62, 62, 62, 0.18);
+  --nav-bg: rgba(236, 236, 236, 0.88);
+  --nav-border: rgba(62, 62, 62, 0.25);
   --card-bg: #ffffff;
+
+  --neo-shadow: 3px 3px 0px rgba(0, 0, 0, 0.85);
+  --neo-shadow-accent: 3px 3px 0px #18181b;
 }
 
-/* Reset & Base Setup */
+/* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -182,7 +194,7 @@ body {
 }
 
 /* ==========================================================================
-   FLOATING TERM-V0 NAVBAR (rounded-[15px] frosted pill)
+   FLOATING NAVBAR (rounded-[15px] frosted pill)
    ========================================================================== */
 .tui-nav-bar {
   position: fixed;
@@ -202,7 +214,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .tui-nav-left {
@@ -221,14 +233,14 @@ body {
   font-size: 0.95rem;
 }
 
-.tui-beta-badge {
+.tui-brand-tag {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 6px;
   background: rgba(var(--tui-accent-rgb), 0.15);
-  border: 1px solid rgba(var(--tui-accent-rgb), 0.3);
+  border: 1px solid rgba(var(--tui-accent-rgb), 0.35);
   color: var(--tui-accent);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -237,7 +249,7 @@ body {
 .tui-nav-links {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -288,15 +300,38 @@ body {
 }
 
 /* ==========================================================================
-   TERM-V0 HERO SECTION (Macintosh / Typewriter / Install Bar)
+   ANIMATE-TEXT TYPOGRAPHY & HERO SECTION
    ========================================================================== */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes shimmerSweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.anim-char, .anim-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.anim-shimmer-sweep {
+  background: linear-gradient(90deg, var(--tui-text-highlight) 0%, var(--tui-accent) 50%, var(--tui-text-highlight) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerSweep 5s linear infinite;
+}
+
 .term-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1.25rem;
-  padding: 1.5rem 0 0.5rem 0;
+  gap: 1.1rem;
+  padding: 1.25rem 0 0.5rem 0;
 }
 
 .term-hero-title {
@@ -306,6 +341,10 @@ body {
   line-height: 1.1;
   color: var(--tui-text-highlight);
   letter-spacing: -0.02em;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .term-hero-subtitle {
@@ -328,6 +367,40 @@ body {
   padding: 0.15rem 0.5rem;
   border-radius: 6px;
   border: 1px solid rgba(var(--tui-accent-rgb), 0.25);
+}
+
+/* Motion Mode Selector in Hero */
+.neo-motion-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--tui-surface);
+  border: 1px solid var(--tui-border);
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+}
+
+.motion-chip {
+  background: transparent;
+  border: none;
+  color: var(--tui-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.motion-chip:hover {
+  color: var(--tui-text-highlight);
+}
+
+.motion-chip.active {
+  background: var(--tui-accent);
+  color: #000;
+  font-weight: 700;
 }
 
 /* Install / Prompt Box */
@@ -420,6 +493,393 @@ body {
   flex-direction: column;
   gap: 1rem;
   flex: 1;
+}
+
+/* ==========================================================================
+   NEO FLEXBOX LABS (Inspired by prazzon/flexbox-labs)
+   ========================================================================== */
+.neo-flex-lab-shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.25rem;
+  width: 100%;
+  min-height: 600px;
+}
+
+@media (max-width: 960px) {
+  .neo-flex-lab-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Panel */
+.neo-flex-sidebar {
+  background: var(--tui-surface);
+  border: 1.5px solid var(--tui-border-strong);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--neo-shadow);
+}
+
+.neo-sidebar-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--tui-surface-subtle);
+  border-bottom: 1px solid var(--tui-border);
+}
+
+.neo-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.65rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--tui-text-dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+}
+
+.neo-tab-btn:hover {
+  color: var(--tui-text-highlight);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.neo-tab-btn.active {
+  color: var(--tui-text-highlight);
+  font-weight: 700;
+  border-bottom: 2px solid var(--tui-accent);
+  background: rgba(var(--tui-accent-rgb), 0.08);
+}
+
+.neo-sidebar-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: 580px;
+}
+
+.neo-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.neo-ctrl-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--tui-text-dim);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+
+.neo-select-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.neo-chip {
+  background: var(--tui-surface-subtle);
+  border: 1px solid var(--tui-border);
+  border-radius: 6px;
+  color: var(--tui-text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.28rem 0.55rem;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.neo-chip:hover {
+  border-color: var(--tui-border-accent);
+  color: var(--tui-text-highlight);
+}
+
+.neo-chip.selected {
+  background: var(--tui-accent);
+  color: #000;
+  border-color: var(--tui-accent);
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(var(--tui-accent-rgb), 0.3);
+}
+
+.neo-flex-row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.neo-value-badge {
+  background: rgba(var(--tui-accent-rgb), 0.15);
+  color: var(--tui-accent);
+  border: 1px solid rgba(var(--tui-accent-rgb), 0.3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.neo-slider {
+  width: 100%;
+  accent-color: var(--tui-accent);
+}
+
+/* Canvas & Toolbar */
+.neo-flex-canvas-wrapper {
+  background: var(--tui-surface);
+  border: 1.5px solid var(--tui-border-strong);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--neo-shadow);
+}
+
+.neo-canvas-toolbar {
+  background: var(--tui-surface-subtle);
+  border-bottom: 1px solid var(--tui-border);
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.neo-toolbar-left, .neo-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.neo-tool-btn {
+  background: var(--tui-surface);
+  border: 1px solid var(--tui-border-strong);
+  border-radius: 7px;
+  color: var(--tui-text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.12s ease;
+}
+
+.neo-tool-btn:hover:not(:disabled) {
+  background: var(--tui-text-highlight);
+  color: #000;
+  border-color: var(--tui-text-highlight);
+}
+
+.neo-tool-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.neo-tool-danger {
+  color: var(--tui-red);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.neo-tool-danger:hover:not(:disabled) {
+  background: var(--tui-red) !important;
+  color: #fff !important;
+}
+
+.neo-axis-btn {
+  background: var(--tui-surface);
+  border: 1.5px solid var(--tui-accent);
+  border-radius: 8px;
+  color: var(--tui-accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.neo-axis-btn:hover {
+  background: rgba(var(--tui-accent-rgb), 0.15);
+}
+
+.neo-axis-arrow {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Canvas Stage */
+.neo-canvas-stage {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  min-height: 480px;
+  overflow: auto;
+}
+
+.neo-live-flex-box {
+  border: 2px dashed var(--tui-border-strong);
+  border-radius: 12px;
+  padding: 1rem;
+  width: 100%;
+  min-height: 440px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Item Card */
+.neo-item-card {
+  background: var(--tui-surface);
+  border: 2px solid var(--tui-border-strong);
+  border-radius: 10px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.neo-item-card:hover {
+  border-color: var(--tui-border-accent);
+  transform: translateY(-2px);
+}
+
+.neo-item-card.is-selected {
+  border-color: var(--tui-accent);
+  box-shadow: 0 0 0 2px rgba(var(--tui-accent-rgb), 0.35), var(--neo-shadow-accent);
+}
+
+.neo-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.neo-item-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--tui-accent);
+}
+
+.neo-item-cat {
+  font-size: 0.68rem;
+  background: var(--tui-surface-subtle);
+  border: 1px solid var(--tui-border);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--tui-text-dim);
+}
+
+.neo-item-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--tui-text-highlight);
+  outline: none;
+  padding: 0.2rem 0;
+}
+
+.neo-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--tui-text-dim);
+  border-top: 1px dashed var(--tui-border);
+  padding-top: 0.35rem;
+}
+
+/* Template Cards */
+.neo-templates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.neo-tpl-card {
+  background: var(--tui-surface-subtle);
+  border: 1px solid var(--tui-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.neo-tpl-card:hover {
+  border-color: var(--tui-accent);
+  background: rgba(var(--tui-accent-rgb), 0.06);
+}
+
+.neo-tpl-card h4 {
+  font-size: 0.82rem;
+  color: var(--tui-text-highlight);
+  margin-bottom: 0.2rem;
+}
+
+.neo-tpl-card p {
+  font-size: 0.72rem;
+  color: var(--tui-text-dim);
+}
+
+/* Code View */
+.neo-code-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.neo-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--tui-text-dim);
+  font-weight: 700;
+}
+
+.neo-btn-copy {
+  background: var(--tui-surface-subtle);
+  border: 1px solid var(--tui-border);
+  color: var(--tui-accent);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.neo-btn-copy:hover {
+  background: var(--tui-accent);
+  color: #000;
+}
+
+.neo-code-block {
+  background: #000000;
+  border: 1px solid var(--tui-border);
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.72rem;
+  color: #a7f3d0;
+  overflow-x: auto;
+  max-height: 200px;
 }
 
 /* ==========================================================================
