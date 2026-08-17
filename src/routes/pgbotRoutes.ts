@@ -205,4 +205,18 @@ router.post('/seed', async (req: Request, res: Response, next: NextFunction): Pr
   }
 });
 
+// Trigger database clear / wipe all dummy seed data
+router.post('/clear', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { clearAllDatabaseData } = await import('../db/seedData.js');
+    const result = await clearAllDatabaseData();
+    res.json({
+      status: 'success',
+      ...result,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

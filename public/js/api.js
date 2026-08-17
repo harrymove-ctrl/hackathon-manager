@@ -78,4 +78,5 @@ export const api = {
   getPgbotQueries: () => request('/pgbot/queries'),
   getPgbotVacuum: () => request('/pgbot/vacuum'),
   triggerSeed: () => request('/pgbot/seed', { method: 'POST' }),
+  triggerClear: () => request('/pgbot/clear', { method: 'POST' }),
 };

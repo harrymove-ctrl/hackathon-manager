@@ -678,6 +678,18 @@ async function triggerSeedReset() {
   }
 }
 
+async function triggerClearReset() {
+  if (!confirm('Clear all database seed data? You will have a fresh clean database to track your own hackathons.')) return;
+  try {
+    showToast('Clearing all seed data...');
+    await api.triggerClear();
+    await fetchAllData();
+    showToast('🧹 All seed data wiped! Database is clean and ready.');
+  } catch (err) {
+    alert('Failed to clear database: ' + err.message);
+  }
+}
+
 // Task Status Advance
 async function advanceTaskStatus(taskId) {
   const task = state.tasks.find(t => t.id === taskId);
@@ -989,6 +1001,7 @@ window.deleteTeamMember = deleteTeamMember;
 window.advanceTaskStatus = advanceTaskStatus;
 window.closeModal = closeModal;
 window.selectRadioStation = selectRadioStation;
+window.triggerClearReset = triggerClearReset;
 window.filterByTag = (tag) => {
   state.filters.resourceTag = tag;
   renderResourcesTab();
@@ -1090,6 +1103,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Buttons
+  const clearDbBtn = document.getElementById('btn-clear-db');
+  if (clearDbBtn) clearDbBtn.addEventListener('click', triggerClearReset);
+
   const seedBtn = document.getElementById('btn-seed-db');
   if (seedBtn) seedBtn.addEventListener('click', triggerSeedReset);
 
@@ -1175,9 +1191,10 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (cmd === 'crt') toggleCRT();
         else if (cmd.startsWith('theme ')) setTheme(cmd.split(' ')[1]);
         else if (cmd === 'seed') triggerSeedReset();
+        else if (cmd === 'clear' || cmd === 'wipe' || cmd === 'clean') triggerClearReset();
         else if (cmd === 'task') openModal('task');
         else if (cmd === 'deadline') openModal('deadline');
-        else if (cmd === '?') showToast('Commands: 1-8, tracks, tasks, deadlines, theme, crt, seed');
+        else if (cmd === '?') showToast('Commands: 1-8, clear, seed, tracks, tasks, deadlines, theme, crt');
         else showToast(`Unknown command: ${cmd}`);
       }
     });

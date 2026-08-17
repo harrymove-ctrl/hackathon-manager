@@ -1,5 +1,17 @@
 import prisma from './index.js';
 
+export async function clearAllDatabaseData() {
+  console.log('🧹 Clearing all tasks, resources, deadlines, and team members from database...');
+  await prisma.task.deleteMany();
+  await prisma.resource.deleteMany();
+  await prisma.deadline.deleteMany();
+  await prisma.teamMember.deleteMany();
+  return {
+    success: true,
+    message: 'All seed data cleared successfully. Clean database ready for your custom hackathons.',
+  };
+}
+
 export async function seedBnbChainData() {
   console.log('🌱 Cleaning old data and initializing BNB Chain: Smart Money Era Hackathon data...');
 
