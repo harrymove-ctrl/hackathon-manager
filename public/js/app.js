@@ -516,9 +516,10 @@ function setupAudioVisualizer() {
   if (!state.radio.animationFrameId) draw();
 }
 
-// Tab Switching
+// Tab Switching with URL Hash Sync
 function switchTab(tabName) {
   state.activeTab = tabName;
+  window.location.hash = tabName;
 
   document.querySelectorAll('.tui-nav-link').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tabName);
@@ -992,6 +993,14 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal();
     }
   });
+
+  // Initial Tab from URL hash or default overview
+  const initialHash = window.location.hash.replace('#', '');
+  if (initialHash && ['overview', 'tracks', 'deadlines', 'tasks', 'flexbox', 'resources', 'team', 'observability', 'radio'].includes(initialHash)) {
+    switchTab(initialHash);
+  } else {
+    switchTab('overview');
+  }
 
   // Fetch initial data
   fetchAllData();
