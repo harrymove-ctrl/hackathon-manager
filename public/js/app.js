@@ -991,6 +991,7 @@ async function deleteTeamMember(id) {
 
 // Global Window Bindings
 window.switchTab = switchTab;
+window.openModal = openModal;
 window.editTask = (id) => openModal('task', id);
 window.editDeadline = (id) => openModal('deadline', id);
 window.editResource = (id) => openModal('resource', id);
@@ -1135,15 +1136,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const modalCloseBtn = document.getElementById('modal-close-btn');
   if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
-
-  const copyInstallBtn = document.getElementById('btn-copy-install');
-  if (copyInstallBtn) {
-    copyInstallBtn.addEventListener('click', () => {
-      const snippet = document.getElementById('install-snippet')?.textContent || 'npx bnb-hackathon init --track smart-money-era';
-      navigator.clipboard.writeText(snippet);
-      showToast('Install command copied to clipboard!');
-    });
-  }
 
   const radioPlayBtn = document.getElementById('btn-radio-toggle-play');
   if (radioPlayBtn) radioPlayBtn.addEventListener('click', toggleRadioPlay);
