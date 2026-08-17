@@ -488,7 +488,7 @@
     </section>
 
     <!-- ====================================================================
-         VIEW 5: RESOURCES & TOOLKIT (/resources)
+         VIEW 5: MULTI-HACKATHON RESOURCES & TOOLKIT HUB (/resources)
          ==================================================================== -->
     <section class="tui-view" id="tab-resources">
       <div class="term-window">
@@ -498,10 +498,54 @@
             <span class="term-dot term-dot-yellow"></span>
             <span class="term-dot term-dot-green"></span>
           </div>
-          <div class="term-window-title">📚 HACKATHON TOOLKIT & OFFICIAL RESOURCES</div>
-          <button class="btn-term btn-term-sm btn-term-primary" id="btn-create-resource">+ RESOURCE</button>
+          <div class="term-window-title">📚 MULTI-HACKATHON TOOLKIT & RESOURCE HUB</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <button class="btn-term btn-term-sm btn-term-primary" id="btn-create-resource">+ RESOURCE</button>
+          </div>
         </div>
-        <div class="term-window-body">
+
+        <div class="term-window-body" style="gap:0.85rem;">
+          <!-- Filter Row 1: Hackathon Selector & Search Input -->
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.65rem; background:var(--tui-surface-subtle); padding:0.65rem 0.85rem; border-radius:10px; border:1px solid var(--tui-border);">
+            
+            <!-- Hackathon Ecosystem Chips -->
+            <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+              <span style="font-size:0.72rem; color:var(--tui-text-dim); font-weight:700;">HACKATHON:</span>
+              <div style="display:flex; gap:0.3rem; flex-wrap:wrap;" id="res-hack-chips">
+                <button class="neo-chip selected" data-hack-filter="ALL">All Hacks (<span id="count-all-res">0</span>)</button>
+                <button class="neo-chip" data-hack-filter="bnb-smart-money">🟡 BNB Smart Money</button>
+                <button class="neo-chip" data-hack-filter="ethglobal">🔷 ETHGlobal / EVM</button>
+                <button class="neo-chip" data-hack-filter="sui">💧 Sui / Walrus</button>
+                <button class="neo-chip" data-hack-filter="general">🌐 General / Infra</button>
+              </div>
+            </div>
+
+            <!-- Instant Search Input -->
+            <div style="display:flex; align-items:center; gap:0.4rem; min-width:240px; flex:1; max-width:380px;">
+              <input type="text" class="tui-input" id="resource-search-input" placeholder="🔍 Search keyword, title, tag, URL..." style="padding:0.35rem 0.65rem; font-size:0.75rem;">
+              <button class="btn-term btn-term-sm" id="btn-clear-res-search" style="display:none;" title="Clear search">✕</button>
+            </div>
+          </div>
+
+          <!-- Filter Row 2: Type Filter Pills & Active Tag Cloud -->
+          <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0.5rem; font-size:0.75rem;">
+            <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+              <span style="color:var(--tui-text-dim); font-weight:700; font-size:0.72rem;">TYPE:</span>
+              <button class="neo-chip selected" data-type-filter="ALL">All Types</button>
+              <button class="neo-chip" data-type-filter="LINK">🔗 Links & Portals</button>
+              <button class="neo-chip" data-type-filter="DOCUMENT">📄 Docs & APIs</button>
+              <button class="neo-chip" data-type-filter="FILE">📦 SDKs & Kits</button>
+              <button class="neo-chip" data-type-filter="NOTE">📝 Notes & Snippets</button>
+            </div>
+
+            <div id="active-tag-indicator" style="display:none; align-items:center; gap:0.4rem;">
+              <span style="color:var(--tui-text-dim); font-size:0.72rem;">Tag:</span>
+              <span class="diff-pill-good" id="active-tag-label">#tag</span>
+              <button class="btn-term btn-term-sm" id="btn-remove-tag-filter" style="padding:1px 5px; font-size:0.65rem;">✕</button>
+            </div>
+          </div>
+
+          <!-- Resources Grid -->
           <div class="tui-grid-3" id="resources-grid">
             <!-- Rendered by JS -->
           </div>

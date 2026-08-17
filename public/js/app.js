@@ -15,6 +15,10 @@ const state = {
   filters: {
     taskAssignee: 'ALL',
     taskPriority: 'ALL',
+    resourceHackathon: 'ALL',
+    resourceType: 'ALL',
+    resourceSearch: '',
+    resourceTag: '',
   },
   radio: {
     stations: [],
@@ -317,32 +321,134 @@ function populateAssigneeFilter() {
 
 function renderResourcesTab() {
   const grid = document.getElementById('resources-grid');
+  const countAllEl = document.getElementById('count-all-res');
+  const activeTagIndicator = document.getElementById('active-tag-indicator');
+  const activeTagLabel = document.getElementById('active-tag-label');
+  const clearSearchBtn = document.getElementById('btn-clear-res-search');
+
+  if (countAllEl) countAllEl.textContent = state.resources.length;
+
+  if (activeTagIndicator) {
+    if (state.filters.resourceTag) {
+      activeTagIndicator.style.display = 'inline-flex';
+      if (activeTagLabel) activeTagLabel.textContent = `#${state.filters.resourceTag}`;
+    } else {
+      activeTagIndicator.style.display = 'none';
+    }
+  }
+
+  if (clearSearchBtn) {
+    clearSearchBtn.style.display = state.filters.resourceSearch ? 'inline-flex' : 'none';
+  }
+
   if (!grid) return;
 
-  if (state.resources.length === 0) {
-    grid.innerHTML = `<div style="color:var(--tui-text-dim); font-size:0.8rem;">No resources listed. Click + RESOURCE to add.</div>`;
+  let filtered = [...state.resources];
+
+  // 1. Hackathon filter
+  if (state.filters.resourceHackathon !== 'ALL') {
+    const hackKey = `hack:${state.filters.resourceHackathon.toLowerCase()}`;
+    filtered = filtered.filter(r => (r.tags || []).some(t => t.toLowerCase() === hackKey));
+  }
+
+  // 2. Type filter
+  if (state.filters.resourceType !== 'ALL') {
+    filtered = filtered.filter(r => r.type === state.filters.resourceType);
+  }
+
+  // 3. Tag filter
+  if (state.filters.resourceTag) {
+    const tagQuery = state.filters.resourceTag.toLowerCase();
+    filtered = filtered.filter(r => (r.tags || []).some(t => t.toLowerCase() === tagQuery || t.toLowerCase() === `hack:${tagQuery}`));
+  }
+
+  // 4. Instant keyword search filter
+  if (state.filters.resourceSearch) {
+    const q = state.filters.resourceSearch.toLowerCase();
+    filtered = filtered.filter(r => 
+      (r.title && r.title.toLowerCase().includes(q)) ||
+      (r.description && r.description.toLowerCase().includes(q)) ||
+      (r.content && r.content.toLowerCase().includes(q)) ||
+      (r.url && r.url.toLowerCase().includes(q)) ||
+      (r.tags && r.tags.some(t => t.toLowerCase().includes(q)))
+    );
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 2.5rem 1rem; text-align: center; color: var(--tui-text-dim); background: var(--tui-surface-subtle); border-radius: 12px; border: 1px dashed var(--tui-border);">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🔍 No resources match your filters</div>
+        <p style="font-size: 0.8rem; max-width: 420px; margin: 0 auto;">No toolkit items matched the selected Hackathon, Type, or Search keywords.</p>
+        <button class="btn-term btn-term-sm btn-term-primary" onclick="window.clearResourceFilters()" style="margin-top: 1rem;">Reset All Filters</button>
+      </div>
+    `;
     return;
   }
 
-  grid.innerHTML = state.resources.map(r => `
-    <div class="category-card">
-      <div class="category-card-header">
-        <span class="diff-pill-good">${r.type || 'GUIDE'}</span>
-        ${r.url ? `<a href="${r.url}" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm" style="color:var(--tui-accent);">OPEN ↗</a>` : ''}
-      </div>
-      <strong style="color:var(--tui-text-highlight); font-size:0.95rem;">${escapeHtml(r.title)}</strong>
-      <p style="font-size:0.78rem; color:var(--tui-text-dim); line-height:1.4;">${escapeHtml(r.description || r.content || '')}</p>
-      ${r.tags && r.tags.length ? `
-        <div style="display:flex; flex-wrap:wrap; gap:0.25rem; margin-top:0.35rem;">
-          ${r.tags.map(tag => `<span style="background:rgba(255,255,255,0.05); padding:1px 5px; border-radius:4px; font-size:0.68rem; color:var(--tui-text-muted);">#${escapeHtml(tag)}</span>`).join('')}
+  grid.innerHTML = filtered.map(r => {
+    // Determine Hackathon badge
+    let hackBadge = '🌐 General';
+    const hackTag = (r.tags || []).find(t => t.startsWith('hack:'));
+    if (hackTag) {
+      const hackName = hackTag.replace('hack:', '');
+      if (hackName === 'bnb-smart-money') { hackBadge = '🟡 BNB Smart Money'; }
+      else if (hackName === 'ethglobal') { hackBadge = '🔷 ETHGlobal'; }
+      else if (hackName === 'sui') { hackBadge = '💧 Sui / Walrus'; }
+      else if (hackName === 'general') { hackBadge = '🌐 General Infra'; }
+      else { hackBadge = `🚀 ${hackName.toUpperCase()}`; }
+    }
+
+    const displayTags = (r.tags || []).filter(t => !t.startsWith('hack:'));
+
+    return `
+      <div class="category-card" style="display:flex; flex-direction:column; justify-content:space-between; gap:0.6rem;">
+        <div>
+          <div class="category-card-header" style="margin-bottom:0.4rem;">
+            <span class="diff-pill-good" style="font-size:0.68rem; font-weight:700;">${hackBadge}</span>
+            <span style="font-size:0.68rem; background:var(--tui-surface-subtle); padding:2px 6px; border-radius:4px; border:1px solid var(--tui-border); color:var(--tui-accent); font-weight:700;">${r.type}</span>
+          </div>
+
+          <strong style="color:var(--tui-text-highlight); font-size:0.95rem; line-height:1.35; display:block;">
+            ${escapeHtml(r.title)}
+          </strong>
+
+          <p style="font-size:0.78rem; color:var(--tui-text-dim); line-height:1.45; margin-top:0.35rem;">
+            ${escapeHtml(r.description || '')}
+          </p>
+
+          ${r.content ? `
+            <div style="background:#000; border:1px solid var(--tui-border); border-radius:6px; padding:0.5rem; font-size:0.7rem; color:#a7f3d0; margin-top:0.5rem; max-height:85px; overflow-y:auto; white-space:pre-wrap; font-family:var(--font-mono);">${escapeHtml(r.content)}</div>
+          ` : ''}
+
+          ${displayTags.length ? `
+            <div style="display:flex; flex-wrap:wrap; gap:0.25rem; margin-top:0.5rem;">
+              ${displayTags.map(tag => `
+                <button class="neo-chip ${state.filters.resourceTag === tag ? 'selected' : ''}" style="padding:1px 6px; font-size:0.68rem;" onclick="window.filterByTag('${escapeHtml(tag)}')">#${escapeHtml(tag)}</button>
+              `).join('')}
+            </div>
+          ` : ''}
         </div>
-      ` : ''}
-      <div style="display:flex; justify-content:flex-end; gap:0.3rem; margin-top:0.5rem;">
-        <button class="btn-term btn-term-sm" onclick="window.editResource('${r.id}')">EDIT</button>
-        <button class="btn-term btn-term-sm btn-term-danger" onclick="window.deleteResource('${r.id}')">DELETE</button>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.75rem; border-top:1px dashed var(--tui-border); padding-top:0.45rem; gap:0.3rem; flex-wrap:wrap;">
+          <div style="display:flex; gap:0.3rem;">
+            ${r.url ? `
+              <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="btn-term btn-term-sm btn-term-primary" title="Open External Link">
+                <span>OPEN ↗</span>
+              </a>
+              <button class="btn-term btn-term-sm" onclick="window.copyResourceUrl('${escapeHtml(r.url)}')" title="Copy URL">
+                <span>📋</span>
+              </button>
+            ` : ''}
+          </div>
+
+          <div style="display:flex; gap:0.3rem;">
+            <button class="btn-term btn-term-sm" onclick="window.editResource('${r.id}')" title="Edit">EDIT</button>
+            <button class="btn-term btn-term-sm btn-term-danger" onclick="window.deleteResource('${r.id}')" title="Delete">✕</button>
+          </div>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function renderTeamTab() {
@@ -678,15 +784,48 @@ function openModal(type, itemId = null) {
   } else if (type === 'resource') {
     const r = itemId ? state.resources.find(x => x.id === itemId) : null;
     title.textContent = r ? '> EDIT RESOURCE' : '> NEW RESOURCE';
+    
+    // Extract hackathon tag
+    const curHackTag = (r?.tags || []).find(t => t.startsWith('hack:')) || 'hack:bnb-smart-money';
+    const otherTags = (r?.tags || []).filter(t => !t.startsWith('hack:')).join(', ');
+
     html = `
-      <label style="font-size:0.75rem; color:var(--tui-text-dim);">TITLE</label>
-      <input type="text" id="m-res-title" class="tui-input" value="${escapeHtml(r?.title || '')}" placeholder="e.g. 8004scan API Portal">
-      
-      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">URL</label>
+      <label style="font-size:0.75rem; color:var(--tui-text-dim);">HACKATHON / ECOSYSTEM</label>
+      <select id="m-res-hackathon" class="tui-select">
+        <option value="hack:bnb-smart-money" ${curHackTag === 'hack:bnb-smart-money' ? 'selected' : ''}>🟡 BNB Chain: The Smart Money Era</option>
+        <option value="hack:ethglobal" ${curHackTag === 'hack:ethglobal' ? 'selected' : ''}>🔷 ETHGlobal / EVM Ecosystem</option>
+        <option value="hack:sui" ${curHackTag === 'hack:sui' ? 'selected' : ''}>💧 Sui / Walrus Hackathons</option>
+        <option value="hack:solana" ${curHackTag === 'hack:solana' ? 'selected' : ''}>🟣 Solana / High-Throughput</option>
+        <option value="hack:general" ${curHackTag === 'hack:general' ? 'selected' : ''}>🌐 General Dev Tools & Infrastructure</option>
+      </select>
+
+      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">RESOURCE TITLE</label>
+      <input type="text" id="m-res-title" class="tui-input" value="${escapeHtml(r?.title || '')}" placeholder="e.g. 8004scan Pro API Portal">
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
+        <div>
+          <label style="font-size:0.75rem; color:var(--tui-text-dim);">TYPE</label>
+          <select id="m-res-type" class="tui-select">
+            <option value="LINK" ${r?.type === 'LINK' ? 'selected' : ''}>🔗 LINK (Portal / Web)</option>
+            <option value="DOCUMENT" ${r?.type === 'DOCUMENT' ? 'selected' : ''}>📄 DOCUMENT (Specs / API)</option>
+            <option value="FILE" ${r?.type === 'FILE' ? 'selected' : ''}>📦 FILE (SDK / Starter Kit)</option>
+            <option value="NOTE" ${r?.type === 'NOTE' ? 'selected' : ''}>📝 NOTE (Snippet / Guide)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.75rem; color:var(--tui-text-dim);">TAGS (comma-separated)</label>
+          <input type="text" id="m-res-tags" class="tui-input" value="${escapeHtml(otherTags)}" placeholder="api, faucet, sdk, defi">
+        </div>
+      </div>
+
+      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">EXTERNAL URL (OPTIONAL)</label>
       <input type="url" id="m-res-url" class="tui-input" value="${escapeHtml(r?.url || '')}" placeholder="https://...">
-      
-      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">DESCRIPTION</label>
-      <textarea id="m-res-desc" class="tui-textarea" rows="2">${escapeHtml(r?.description || '')}</textarea>
+
+      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">DESCRIPTION & KEY SPECIFICATIONS</label>
+      <textarea id="m-res-desc" class="tui-textarea" rows="2" placeholder="Brief summary of this resource...">${escapeHtml(r?.description || '')}</textarea>
+
+      <label style="font-size:0.75rem; color:var(--tui-text-dim); margin-top:0.5rem;">CODE SNIPPET / CONTENT NOTES (OPTIONAL)</label>
+      <textarea id="m-res-content" class="tui-textarea" rows="3" placeholder="curl commands, SDK snippets, or API notes...">${escapeHtml(r?.content || '')}</textarea>
 
       <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
         <button class="btn-term" onclick="window.closeModal()">CANCEL</button>
@@ -765,16 +904,22 @@ async function saveDeadline(id) {
 
 async function saveResource(id) {
   const title = document.getElementById('m-res-title')?.value.trim();
+  const hackTag = document.getElementById('m-res-hackathon')?.value || 'hack:bnb-smart-money';
+  const type = document.getElementById('m-res-type')?.value || 'LINK';
   const url = document.getElementById('m-res-url')?.value.trim() || null;
   const description = document.getElementById('m-res-desc')?.value.trim();
+  const content = document.getElementById('m-res-content')?.value.trim() || null;
+  const rawTags = (document.getElementById('m-res-tags')?.value || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
 
   if (!title) return alert('Title is required');
 
+  const tags = [hackTag, ...rawTags.filter(t => !t.startsWith('hack:'))];
+
   try {
-    if (id) await api.updateResource(id, { title, url, description, type: 'LINK', tags: ['bnb', 'guide'] });
-    else await api.createResource({ title, url, description, type: 'LINK', tags: ['bnb', 'guide'], createdBy: 'Squad' });
+    if (id) await api.updateResource(id, { title, url, type, tags, description, content });
+    else await api.createResource({ title, url, type, tags, description, content, createdBy: 'Squad Lead' });
     closeModal();
-    showToast('Resource saved!');
+    showToast('Resource saved successfully!');
     await fetchAllData();
   } catch (err) {
     alert(err.message);
@@ -844,6 +989,26 @@ window.deleteTeamMember = deleteTeamMember;
 window.advanceTaskStatus = advanceTaskStatus;
 window.closeModal = closeModal;
 window.selectRadioStation = selectRadioStation;
+window.filterByTag = (tag) => {
+  state.filters.resourceTag = tag;
+  renderResourcesTab();
+  switchTab('resources');
+};
+window.clearResourceFilters = () => {
+  state.filters.resourceHackathon = 'ALL';
+  state.filters.resourceType = 'ALL';
+  state.filters.resourceTag = '';
+  state.filters.resourceSearch = '';
+  const s = document.getElementById('resource-search-input');
+  if (s) s.value = '';
+  document.querySelectorAll('[data-hack-filter]').forEach(b => b.classList.toggle('selected', b.dataset.hackFilter === 'ALL'));
+  document.querySelectorAll('[data-type-filter]').forEach(b => b.classList.toggle('selected', b.dataset.typeFilter === 'ALL'));
+  renderResourcesTab();
+};
+window.copyResourceUrl = (url) => {
+  navigator.clipboard.writeText(url);
+  showToast('Direct resource URL copied to clipboard!');
+};
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -875,6 +1040,54 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.tui-nav-link').forEach(btn => {
     btn.addEventListener('click', () => switchTab(btn.dataset.tab));
   });
+
+  // Resource Hackathon Ecosystem Filter Chips
+  document.querySelectorAll('[data-hack-filter]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('[data-hack-filter]').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      state.filters.resourceHackathon = chip.dataset.hackFilter;
+      renderResourcesTab();
+    });
+  });
+
+  // Resource Type Filter Chips
+  document.querySelectorAll('[data-type-filter]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('[data-type-filter]').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      state.filters.resourceType = chip.dataset.typeFilter;
+      renderResourcesTab();
+    });
+  });
+
+  // Resource Instant Search
+  const resSearchInput = document.getElementById('resource-search-input');
+  if (resSearchInput) {
+    resSearchInput.addEventListener('input', (e) => {
+      state.filters.resourceSearch = e.target.value.trim();
+      renderResourcesTab();
+    });
+  }
+
+  // Clear Search Button
+  const clearSearchBtn = document.getElementById('btn-clear-res-search');
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', () => {
+      if (resSearchInput) resSearchInput.value = '';
+      state.filters.resourceSearch = '';
+      renderResourcesTab();
+    });
+  }
+
+  // Remove Tag Filter Button
+  const removeTagBtn = document.getElementById('btn-remove-tag-filter');
+  if (removeTagBtn) {
+    removeTagBtn.addEventListener('click', () => {
+      state.filters.resourceTag = '';
+      renderResourcesTab();
+    });
+  }
 
   // Buttons
   const seedBtn = document.getElementById('btn-seed-db');
@@ -910,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyInstallBtn = document.getElementById('btn-copy-install');
   if (copyInstallBtn) {
     copyInstallBtn.addEventListener('click', () => {
-      const snippet = document.getElementById('install-snippet')?.textContent || 'npx bnb-agent-studio init --track smart-money-era';
+      const snippet = document.getElementById('install-snippet')?.textContent || 'npx bnb-hackathon init --track smart-money-era';
       navigator.clipboard.writeText(snippet);
       showToast('Install command copied to clipboard!');
     });

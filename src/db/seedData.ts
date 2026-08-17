@@ -171,15 +171,16 @@ export async function seedBnbChainData() {
     ],
   });
 
-  // 4. Create Resources for BNB Chain Hackathon
+  // 4. Create Multi-Hackathon Resources & Toolkit
   await prisma.resource.createMany({
     data: [
+      // --- HACKATHON 1: BNB CHAIN: SMART MONEY ERA ---
       {
-        title: 'BNB Chain Hackathon: The Smart Money Era Official Portal',
+        title: 'BNB Chain: The Smart Money Era Official Portal',
         description: 'Official hackathon details, track specifications, submission guidelines, FAQ, and schedule on the BNB Chain portal.',
         type: 'LINK',
         url: 'https://www.bnbchain.org/en/hackathons/smart-money-era?tab=tracks',
-        tags: ['bnbchain', 'hackathon', 'smart-money-era', 'tracks', 'bounties'],
+        tags: ['hack:bnb-smart-money', 'portal', 'smart-money-era', 'tracks', 'bounties'],
         createdBy: 'Harry Phan',
       },
       {
@@ -192,12 +193,8 @@ export async function seedBnbChainData() {
   1. **Rebalancing**: Manages LP ranges, resets positions automatically on DEXes.
   2. **Grid Trading**: Places and dynamically manages automated grid buy/sell orders.
   3. **Yield Optimisation**: Continuously routes liquidity to highest available APR.
-  4. **Health Factor Monitoring**: Monitors collateral ratios to protect lending positions against liquidation.
-- **Judging Criteria**:
-  - **Functionality**: Frictionless end-to-end journey (discover, compare, hire, activate).
-  - **Data Quality**: Real-time accurate metrics beyond simple counts.
-  - **Agent Diversity**: All 4 categories surfaced with equal depth.`,
-        tags: ['main-track', 'marketplace', 'ai-agents', '30k-prize', 'bnb-agent-studio'],
+  4. **Health Factor Monitoring**: Monitors collateral ratios to protect lending positions against liquidation.`,
+        tags: ['hack:bnb-smart-money', 'main-track', 'marketplace', 'ai-agents', '30k-prize'],
         createdBy: 'Sarah Chen',
       },
       {
@@ -209,35 +206,29 @@ export async function seedBnbChainData() {
 - **Mandatory Agent Advantage Report**:
   - Must benchmark at least 3 real tasks run both ways (Agent vs Manual).
   - For each task, report: execution time, cost/gas, and output quality score (1-100).
-  - At least one task must be from trading, stock, or security categories.
 - **Resources**: TermiX BSC MCP Server for seamless agent automation.`,
-        tags: ['termix', 'bounties', 'agent-advantage-report', '10k-prize', 'mcp'],
+        tags: ['hack:bnb-smart-money', 'termix', 'bounties', 'agent-advantage-report', '10k-prize', 'mcp'],
         createdBy: 'Sarah Chen',
       },
       {
-        title: 'Altana Partner Track: 50,000 Altana XP (Winner Takes All)',
-        description: 'Build self-custodial sovereign agents on BNB Chain where agents transact for themselves inside user-scoped limits.',
+        title: 'Altana Partner Track: 50,000 Altana XP (Sovereign Session Keys)',
+        description: 'Build self-custodial sovereign agents on BNB Chain where agents transact for themselves inside user-scoped limits with public Keystore session key registry.',
         type: 'DOCUMENT',
         content: `### Altana Sovereign Agent Requirements:
 - **Core Stack**:
   - Agents hold their own Altana wallets with scoped session keys.
   - Limits: call allowlist, spend caps, and expiry timestamp.
   - Session keys registered in public on-chain Keystore registry.
-  - Live on-chain transactions visible in the Altana Explorer.
-  - 1-click user instant revocation.
-- **Bonus Integrations**:
-  - Hire agents via ERC-8183 SDK (\`hireErc8183Agent\`).
-  - x402 Server SDK (\`@altananetwork/x402-server\`) for streaming micropayments.
-  - 10 Production skills at \`skills.altana.network\`: Aave V3, Copy Trade, Four.meme, Lista, PancakeSwap Liquidity/Trading, Token Radar, Venus, Wallet Tracker, x402.`,
-        tags: ['altana', 'bounties', 'session-keys', 'sovereign-agents', 'erc-8183', 'x402'],
+  - Live on-chain transactions visible in the Altana Explorer.`,
+        tags: ['hack:bnb-smart-money', 'altana', 'bounties', 'session-keys', 'sovereign-agents', 'erc-8183'],
         createdBy: 'Harry Phan',
       },
       {
-        title: 'PancakeSwap Challenge: 1,000 CAKE Bounty',
-        description: 'Deliver tangible benefits to PancakeSwap traders and liquidity providers via smarter LP routing, automated arbitrage, and yield optimization.',
+        title: 'PancakeSwap v3 Developer SDK & Smart Router Docs',
+        description: 'Deliver tangible benefits to PancakeSwap traders and liquidity providers via smarter LP routing, automated arbitrage, and yield optimization (1,000 CAKE Bounty).',
         type: 'LINK',
         url: 'https://docs.pancakeswap.finance',
-        tags: ['pancakeswap', 'defi', 'dex', 'swap', 'cake'],
+        tags: ['hack:bnb-smart-money', 'pancakeswap', 'defi', 'dex', 'cake', 'sdk'],
         createdBy: 'Harry Phan',
       },
       {
@@ -245,32 +236,110 @@ export async function seedBnbChainData() {
         description: 'Complimentary Pro-tier API access for hackathon builders: 500 requests/minute, 100,000 requests/day for indexing ERC-8004 metadata and reputation.',
         type: 'LINK',
         url: 'https://8004scan.io',
-        tags: ['8004scan', 'api', 'erc-8004', 'reputation', 'altlayer'],
+        tags: ['hack:bnb-smart-money', '8004scan', 'api', 'erc-8004', 'reputation'],
         createdBy: 'Sarah Chen',
-      },
-      {
-        title: 'Official Hackathon Project Submission Form (Google Form)',
-        description: 'Official submission form link: submit your GitHub repository, live demo link, and 3-minute pitch video before September 9, 2026 (23:59 UTC).',
-        type: 'LINK',
-        url: 'https://forms.gle/9g9XPNFwnYaHAz9L8',
-        tags: ['submission', 'google-form', 'deadline', 'apply'],
-        createdBy: 'Alex Rivera',
       },
       {
         title: 'BSC Testnet Faucet for BNB Gas Tokens',
         description: 'Obtain testnet BNB tokens for deploying smart contracts, funding Altana session keys, and simulating agent transactions.',
         type: 'LINK',
         url: 'https://www.bnbchain.org/en/testnet-faucet',
-        tags: ['faucet', 'bsc-testnet', 'gas', 'bnb'],
+        tags: ['hack:bnb-smart-money', 'faucet', 'bsc-testnet', 'gas', 'bnb'],
         createdBy: 'Harry Phan',
       },
+      {
+        title: 'Official Hackathon Project Submission Form (Google Form)',
+        description: 'Official submission form link: submit your GitHub repository, live demo link, and 3-minute pitch video before deadline.',
+        type: 'LINK',
+        url: 'https://forms.gle/9g9XPNFwnYaHAz9L8',
+        tags: ['hack:bnb-smart-money', 'submission', 'google-form', 'deadline'],
+        createdBy: 'Alex Rivera',
+      },
+
+      // --- HACKATHON 2: ETHGLOBAL & EVM ECOSYSTEM ---
+      {
+        title: 'ETHGlobal Hackathon Builder Hub & Schedule',
+        description: 'Global EVM hackathon tracks, judging rubrics, sponsor workshop recordings, and submission deadlines.',
+        type: 'LINK',
+        url: 'https://ethglobal.com',
+        tags: ['hack:ethglobal', 'portal', 'evm', 'ethereum', 'tracks'],
+        createdBy: 'Sarah Chen',
+      },
+      {
+        title: 'Scaffold-ETH 2 // Next.js & Hardhat/Foundry Dapp Starter',
+        description: 'Production-ready open source toolkit for building fast decentralized applications on EVM chains with pre-configured wallets and contract hooks.',
+        type: 'FILE',
+        url: 'https://scaffoldeth.io',
+        tags: ['hack:ethglobal', 'sdk', 'starter-kit', 'solidity', 'foundry', 'nextjs'],
+        createdBy: 'Alex Rivera',
+      },
+      {
+        title: 'Chainlink CCIP & Data Feeds Developer Portal',
+        description: 'Cross-chain interoperability protocol and verified decentralized oracle price feeds for automated multi-chain dapps.',
+        type: 'LINK',
+        url: 'https://docs.chain.link/ccip',
+        tags: ['hack:ethglobal', 'oracle', 'ccip', 'api', 'chainlink'],
+        createdBy: 'Sarah Chen',
+      },
+      {
+        title: 'Sepolia & Holesky EVM Multi-Faucet Faucet Hub',
+        description: 'Unified faucet aggregator for testnet ETH across Ethereum Sepolia, Base Sepolia, and Arbitrum Sepolia.',
+        type: 'LINK',
+        url: 'https://sepolia-faucet.pk910.de',
+        tags: ['hack:ethglobal', 'faucet', 'testnet', 'sepolia', 'gas'],
+        createdBy: 'Harry Phan',
+      },
+
+      // --- HACKATHON 3: SUI & WALRUS ECOSYSTEM ---
+      {
+        title: 'Sui Overflow Global Hackathon Portal',
+        description: 'Official portal for Sui Overflow: tracks across DeFi, Gaming, AI, Infra, and Walrus decentralized storage.',
+        type: 'LINK',
+        url: 'https://sui.io/overflow',
+        tags: ['hack:sui', 'portal', 'sui-overflow', 'move', 'tracks'],
+        createdBy: 'Harry Phan',
+      },
+      {
+        title: 'Walrus Decentralized Blob Storage SDK & Documentation',
+        description: 'Decentralized storage protocol for large binary files, AI models, media assets, and zero-knowledge proofs on Sui.',
+        type: 'FILE',
+        url: 'https://docs.walrus.site',
+        tags: ['hack:sui', 'walrus', 'storage', 'sdk', 'blob'],
+        createdBy: 'Alex Rivera',
+      },
+      {
+        title: 'Sui TypeScript SDK (@mysten/sui) & dApp Kit Guide',
+        description: 'Official client library for interacting with the Sui network, signing transactions, and managing Move objects.',
+        type: 'DOCUMENT',
+        content: `### Sui SDK Quickstart:
+\`\`\`bash
+npm install @mysten/sui @mysten/dapp-kit @tanstack/react-query
+\`\`\`
+- Use SuiClient for gRPC and checkpoint queries.
+- Transactions use \`Transaction\` builder (replaces deprecated \`TransactionBlock\`).`,
+        tags: ['hack:sui', 'sdk', 'move', 'typescript', 'dapp-kit'],
+        createdBy: 'Harry Phan',
+      },
+
+      // --- HACKATHON 4: GENERAL DEV TOOLS & INFRA ---
       {
         title: 'pgbot - PostgreSQL Real-Time Observability & Profiler',
         description: 'High-performance database profiler and MCP server monitoring cache hit ratio, active query latency, and dead tuple collection on Railway.',
         type: 'LINK',
         url: 'https://github.com/pgrundev/pgbot',
-        tags: ['pgbot', 'database', 'postgres', 'observability', 'mcp'],
+        tags: ['hack:general', 'pgbot', 'database', 'postgres', 'observability', 'mcp'],
         createdBy: 'Harry Phan',
+      },
+      {
+        title: 'Antigravity Autonomous AI Agent SDK Reference',
+        description: 'Comprehensive guidelines and architecture patterns for building multi-agent systems, tool execution harnesses, and autonomous workflows.',
+        type: 'NOTE',
+        content: `### AI Agent Tooling Best Practices:
+1. Keep tools single-purpose with strict JSON schema inputs.
+2. Maintain reactive wakeup over polling.
+3. Use progressive disclosure in codebase documentation.`,
+        tags: ['hack:general', 'ai-agent', 'sdk', 'antigravity', 'mcp'],
+        createdBy: 'Sarah Chen',
       },
     ],
   });
