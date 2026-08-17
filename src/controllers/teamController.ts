@@ -5,7 +5,8 @@ import { ValidationError } from '../utils/errors.js';
 export class TeamController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const members = await teamMemberService.findAll();
+      const projectId = req.query.projectId as string | undefined;
+      const members = await teamMemberService.findAll(projectId);
       res.json(members);
     } catch (error) {
       next(error);

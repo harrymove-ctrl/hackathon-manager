@@ -42,32 +42,36 @@ async function request(endpoint, options = {}) {
 }
 
 export const api = {
+  // Projects
+  getProjects: () => request('/projects'),
+  createProject: (data) => request('/projects', { method: 'POST', body: JSON.stringify(data) }),
+
   // Progress
   getProgressSummary: () => request('/progress/summary'),
   getMemberProgress: (memberId) => request(`/progress/team/${memberId}`),
 
   // Deadlines
-  getDeadlines: () => request('/deadlines'),
+  getDeadlines: (projectId) => request(`/deadlines${projectId ? `?projectId=${projectId}` : ''}`),
   getUpcomingDeadlines: () => request('/deadlines/upcoming'),
   createDeadline: (data) => request('/deadlines', { method: 'POST', body: JSON.stringify(data) }),
   updateDeadline: (id, data) => request(`/deadlines/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteDeadline: (id) => request(`/deadlines/${id}`, { method: 'DELETE' }),
 
   // Tasks
-  getTasks: () => request('/tasks'),
+  getTasks: (projectId) => request(`/tasks${projectId ? `?projectId=${projectId}` : ''}`),
   getTasksByMember: (memberId) => request(`/tasks/team/${memberId}`),
   createTask: (data) => request('/tasks', { method: 'POST', body: JSON.stringify(data) }),
   updateTask: (id, data) => request(`/tasks/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteTask: (id) => request(`/tasks/${id}`, { method: 'DELETE' }),
 
   // Resources
-  getResources: () => request('/resources'),
+  getResources: (projectId) => request(`/resources${projectId ? `?projectId=${projectId}` : ''}`),
   createResource: (data) => request('/resources', { method: 'POST', body: JSON.stringify(data) }),
   updateResource: (id, data) => request(`/resources/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteResource: (id) => request(`/resources/${id}`, { method: 'DELETE' }),
 
   // Team
-  getTeam: () => request('/team'),
+  getTeam: (projectId) => request(`/team${projectId ? `?projectId=${projectId}` : ''}`),
   createTeam: (data) => request('/team', { method: 'POST', body: JSON.stringify(data) }),
   updateTeam: (id, data) => request(`/team/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteTeam: (id) => request(`/team/${id}`, { method: 'DELETE' }),

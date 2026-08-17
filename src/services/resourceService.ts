@@ -10,6 +10,7 @@ export const createResourceSchema = z.object({
   content: z.string().optional().nullable(),
   tags: z.array(z.string()).default([]),
   createdBy: z.string().min(1),
+  projectId: z.string().uuid().optional().nullable(),
 });
 
 export const updateResourceSchema = createResourceSchema.partial();
@@ -18,8 +19,9 @@ export type CreateResource = z.infer<typeof createResourceSchema>;
 export type UpdateResource = z.infer<typeof updateResourceSchema>;
 
 export class ResourceService {
-  async findAll() {
+  async findAll(projectId?: string) {
     return prisma.resource.findMany({
+      where: projectId ? { projectId } : undefined,
       orderBy: { createdAt: 'desc' },
     });
   }

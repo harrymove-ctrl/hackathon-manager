@@ -5,7 +5,8 @@ import { ValidationError } from '../utils/errors.js';
 export class ResourceController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const resources = await resourceService.findAll();
+      const projectId = req.query.projectId as string | undefined;
+      const resources = await resourceService.findAll(projectId);
       res.json(resources);
     } catch (error) {
       next(error);

@@ -5,7 +5,8 @@ import { ValidationError } from '../utils/errors.js';
 export class TaskController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const tasks = await taskService.findAll();
+      const projectId = req.query.projectId as string | undefined;
+      const tasks = await taskService.findAll(projectId);
       res.json(tasks);
     } catch (error) {
       next(error);

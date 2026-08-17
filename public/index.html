@@ -52,6 +52,7 @@
 
     <!-- Top Right Actions (Amber / Slate toggle) -->
     <div class="tui-nav-right">
+      <div id="project-switcher" style="display:inline-block; margin-right: 10px;"></div>
       <button class="btn-term btn-term-sm" id="btn-cycle-theme" title="Toggle Theme (Amber / Slate)">
         <span id="theme-name-display">AMBER</span>
       </button>
@@ -62,7 +63,7 @@
         🗑️ CLEAR ALL
       </button>
       <button class="btn-term btn-term-sm" id="btn-seed-db" title="Re-seed Official BNB Chain Hackathon Data">
-        ↻ SEED
+        ↻ SEED BNB
       </button>
       <button class="btn-term btn-term-sm btn-term-primary" id="btn-new-task" title="Add Deliverable Task">
         + TASK
@@ -521,6 +522,7 @@
               <span style="font-size:0.72rem; color:var(--tui-text-dim); font-weight:700;">HACKATHON:</span>
               <div style="display:flex; gap:0.3rem; flex-wrap:wrap;" id="res-hack-chips">
                 <button class="neo-chip selected" data-hack-filter="ALL">All Hacks (<span id="count-all-res">0</span>)</button>
+                <button class="neo-chip" data-hack-filter="midnight">🌙 Midnight Network</button>
                 <button class="neo-chip" data-hack-filter="bnb-smart-money">🟡 BNB Smart Money</button>
                 <button class="neo-chip" data-hack-filter="ethglobal">🔷 ETHGlobal / EVM</button>
                 <button class="neo-chip" data-hack-filter="sui">💧 Sui / Walrus</button>

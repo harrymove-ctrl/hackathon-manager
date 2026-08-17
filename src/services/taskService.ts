@@ -9,6 +9,7 @@ export const createTaskSchema = z.object({
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
   assigneeId: z.string().uuid().optional().nullable(),
   deadlineId: z.string().uuid().optional().nullable(),
+  projectId: z.string().uuid().optional().nullable(),
 });
 
 export const updateTaskSchema = createTaskSchema.partial();
@@ -17,8 +18,9 @@ export type CreateTask = z.infer<typeof createTaskSchema>;
 export type UpdateTask = z.infer<typeof updateTaskSchema>;
 
 export class TaskService {
-  async findAll() {
+  async findAll(projectId?: string) {
     return prisma.task.findMany({
+      where: projectId ? { projectId } : undefined,
       include: { assignee: true },
       orderBy: [
         { status: 'asc' },

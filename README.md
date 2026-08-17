@@ -1,88 +1,99 @@
-# Hackathon Manager
+# BNB Chain "Smart Money Era" Hackathon Manager
 
-Team hackathon manager with resources, deadlines, progress tracking, and pgbot PostgreSQL observability.
+A terminal-style dashboard for tracking hackathon progress, deadlines, and team collaboration.
 
-## Features
+## 🎯 Hackathon Info
 
-- 📚 **Resources**: Manage hackathon documents, links, and files
-- ⏰ **Deadlines**: Track submission deadlines with priority levels
-- ✅ **Progress Tracker**: Task assignments for team members (2-5 people)
-- 📊 **Dashboard**: Overview of team progress and upcoming deadlines
-- 🔍 **pgbot Integration**: PostgreSQL observability and health monitoring
+| Field | Details |
+|-------|---------|
+| **Event** | The Smart Money Era: Build the Era |
+| **Dates** | 5 Aug - 9 Sep, 2026 |
+| **Prize Pool** | $30,000 USD + adoption |
+| **Category** | AI / BNB Agent Studio |
+| **Status** | 🚀 Ongoing |
 
-## Tech Stack
+## 🏆 Tracks
 
-- **Runtime**: Node.js 20+
-- **Framework**: Express.js
-- **Language**: TypeScript
-- **ORM**: Prisma
+### Main Track: BNB Agent Studio Marketplace
+**Prize:** $30,000 + official adoption as BNB Agent Studio marketplace
+
+**Required Agents:**
+1. Rebalancing (LP ranges, position resets)
+2. Grid Trading (automated grid orders)
+3. Yield Optimisation (liquidity routing)
+4. Health Factor Monitoring (liquidation protection)
+
+### Partner Tracks
+- **Altana**: 50,000 Altana XP
+- **TermiX**: $6,000 / $3,000 / $1,000
+- **PancakeSwap**: 1,000 CAKE
+
+## 🔗 Key Resources
+
+- [BNB Agent Studio](https://www.bnbchain.org/en/bnb-agent-studio)
+- [Altana Docs & SDK](https://docs.altana.network/)
+- [BSC Testnet Faucet](https://testnet.bnbchain.org/faucet-smart)
+- [TermiX BSC MCP](https://github.com/TermiX-official/bsc-mcp)
+- [PancakeSwap Developer Portal](https://developer.pancakeswap.finance/)
+
+## 💻 Tech Stack
+
+- **Backend**: Node.js + Express + TypeScript
 - **Database**: PostgreSQL (Railway)
-- **Deployment**: Railway
-- **pgbot**: PostgreSQL observability (via CLI wrapper)
+- **ORM**: Prisma
+- **Observability**: pgbot for PostgreSQL health
+- **Frontend**: Terminal-style dashboard (planned)
 
-## Setup
+## 🚀 API Endpoints
 
-```bash
-# Install dependencies
-npm install
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/resources` | List hackathon resources |
+| `GET /api/deadlines` | Track deadlines |
+| `GET /api/tasks` | Task board |
+| `GET /api/team` | Team members |
+| `GET /api/progress/summary` | Overall progress |
+| `GET /api/pgbot/inspect` | Database health |
+| `GET /health` | Server health |
 
-# Copy environment variables
-cp .env.example .env
+## 📦 Project Status
 
-# Generate Prisma client
-npx prisma generate
+### Completed ✅
+- [x] Backend API setup
+- [x] PostgreSQL database
+- [x] Railway deployment
+- [x] Basic CRUD endpoints
 
-# Run migrations
-npm run db:migrate
+### In Progress 🔄
+- [ ] Frontend dashboard UI/UX
+- [ ] Terminal-style design (term-v0 inspired)
+- [ ] Real-time countdown timers
+- [ ] Team progress visualization
 
-# Start development server
-npm run dev
-```
+## 🎨 Design Inspiration
 
-## API Endpoints
+Terminal/command-line aesthetic inspired by term-v0.app:
+- Dark theme (#0a0a0f background)
+- Monospace fonts (JetBrains Mono)
+- Cyan/green accent colors
+- ASCII-art inspired borders
 
-### Resources
-- `GET /api/resources` - List all resources
-- `POST /api/resources` - Create resource
-- `PUT /api/resources/:id` - Update resource
-- `DELETE /api/resources/:id` - Delete resource
+## 🔗 Live URLs
 
-### Deadlines
-- `GET /api/deadlines` - List all deadlines
-- `GET /api/deadlines/upcoming` - Get upcoming deadlines
-- `POST /api/deadlines` - Create deadline
-- `PUT /api/deadlines/:id` - Update deadline
-- `DELETE /api/deadlines/:id` - Delete deadline
+- **API**: https://api-production-83367.up.railway.app
+- **Dashboard**: Coming soon...
 
-### Tasks
-- `GET /api/tasks` - List all tasks
-- `GET /api/tasks/team/:memberId` - Get tasks by team member
-- `POST /api/tasks` - Create task
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
+## 📅 Timeline
 
-### Team
-- `GET /api/team` - List team members
-- `POST /api/team` - Add team member
-- `PUT /api/team/:id` - Update team member
-- `DELETE /api/team/:id` - Remove team member
+- **Now - 9 Sep 2026**: Build Phase
+- **TBD**: Shortlist Announcement
+- **TBD**: Winner Announcement
 
-### Progress
-- `GET /api/progress/summary` - Overall progress stats
-- `GET /api/progress/team/:memberId` - Individual team member progress
+## 💬 Community
 
-### pgbot (Database Observability)
-- `GET /api/pgbot/inspect` - Database health inspection
-- `GET /api/pgbot/indexes` - Index analysis
-- `GET /api/pgbot/queries` - Query performance
-- `GET /api/pgbot/vacuum` - Vacuum health
-
-### Health
-- `GET /health` - Health check
-
-## Deployment
-
-Deployed on Railway: https://railway.app
+- [Discord](https://discord.com/invite/bnbchain)
+- [Twitter](https://twitter.com/BNBChain)
+- [Telegram](https://t.me/bnbchain)
 
 ## License
 

@@ -4,6 +4,8 @@ import { AnimateText } from './animateText.js';
 // Application State
 const state = {
   activeTab: 'overview',
+  activeProjectId: null,
+  projects: [],
   deadlines: [],
   tasks: [],
   resources: [],
@@ -87,20 +89,29 @@ function showToast(message) {
 // Data Fetching
 async function fetchAllData() {
   try {
-    const [deadlines, tasks, resources, team, progress] = await Promise.all([
-      api.getDeadlines().catch(() => []),
-      api.getTasks().catch(() => []),
-      api.getResources().catch(() => []),
-      api.getTeam().catch(() => []),
+    const [projects, deadlines, tasks, resources, team, progress] = await Promise.all([
+      api.getProjects().catch(() => []),
+      api.getDeadlines(state.activeProjectId).catch(() => []),
+      api.getTasks(state.activeProjectId).catch(() => []),
+      api.getResources(state.activeProjectId).catch(() => []),
+      api.getTeam(state.activeProjectId).catch(() => []),
       api.getProgressSummary().catch(() => null),
     ]);
 
+    state.projects = projects || [];
     state.deadlines = deadlines || [];
     state.tasks = tasks || [];
     state.resources = resources || [];
     state.team = team || [];
     state.progress = progress;
 
+    if (!state.activeProjectId && state.projects.length > 0) {
+      state.activeProjectId = state.projects[0].id;
+      // Re-fetch data for the selected project
+      return fetchAllData();
+    }
+
+    renderProjectSwitcher();
     renderAll();
     populateAssigneeFilter();
   } catch (err) {
@@ -132,6 +143,28 @@ function renderAll() {
   renderResourcesTab();
   renderTeamTab();
 }
+
+function renderProjectSwitcher() {
+  const switcher = document.getElementById('project-switcher');
+  if (!switcher) return;
+  
+  if (state.projects.length === 0) {
+    switcher.innerHTML = '<span style="color:var(--tui-text-dim);">No Active Projects</span>';
+    return;
+  }
+  
+  switcher.innerHTML = `
+    <select class="tui-select" style="min-width: 200px; font-size: 0.8rem; padding: 2px 4px; height: auto;" onchange="window.switchProject(this.value)">
+      <option value="">-- All Projects --</option>
+      ${state.projects.map(p => \`<option value="\${p.id}" \${p.id === state.activeProjectId ? 'selected' : ''}>\${escapeHtml(p.name)}</option>\`).join('')}
+    </select>
+  `;
+}
+
+window.switchProject = async function(projectId) {
+  state.activeProjectId = projectId || null;
+  await fetchAllData();
+};
 
 function renderOverviewTab() {
   const metricProgress = document.getElementById('metric-progress');
@@ -668,13 +701,15 @@ function toggleCRT() {
 }
 
 async function triggerSeedReset() {
+  if (!confirm('This will insert BNB Chain Hackathon seed data. Proceed?')) return;
   try {
-    showToast('Resetting & seeding BNB Chain Smart Money Era data...');
     await api.triggerSeed();
+    showToast('Database seeded with BNB Chain hackathon data!');
+    // Set active project to BNB if it exists (or clear active to let it auto-select)
+    state.activeProjectId = null;
     await fetchAllData();
-    showToast('✅ Official BNB Chain Hackathon seed loaded successfully!');
   } catch (err) {
-    alert('Failed to seed: ' + err.message);
+    alert(err.message);
   }
 }
 
@@ -804,6 +839,7 @@ function openModal(type, itemId = null) {
     html = `
       <label style="font-size:0.75rem; color:var(--tui-text-dim);">HACKATHON / ECOSYSTEM</label>
       <select id="m-res-hackathon" class="tui-select">
+        <option value="hack:midnight" ${curHackTag === 'hack:midnight' ? 'selected' : ''}>🌙 Midnight Network</option>
         <option value="hack:bnb-smart-money" ${curHackTag === 'hack:bnb-smart-money' ? 'selected' : ''}>🟡 BNB Chain: The Smart Money Era</option>
         <option value="hack:ethglobal" ${curHackTag === 'hack:ethglobal' ? 'selected' : ''}>🔷 ETHGlobal / EVM Ecosystem</option>
         <option value="hack:sui" ${curHackTag === 'hack:sui' ? 'selected' : ''}>💧 Sui / Walrus Hackathons</option>
@@ -886,7 +922,7 @@ async function saveTask(id) {
 
   try {
     if (id) await api.updateTask(id, { title, description, priority, assigneeId });
-    else await api.createTask({ title, description, priority, assigneeId });
+    else await api.createTask({ title, description, priority, assigneeId, projectId: state.activeProjectId });
     closeModal();
     showToast('Deliverable task saved!');
     await fetchAllData();
@@ -905,7 +941,7 @@ async function saveDeadline(id) {
 
   try {
     if (id) await api.updateDeadline(id, { title, description, priority, dueDate: new Date(dueDate).toISOString() });
-    else await api.createDeadline({ title, description, priority, dueDate: new Date(dueDate).toISOString() });
+    else await api.createDeadline({ title, description, priority, dueDate: new Date(dueDate).toISOString(), projectId: state.activeProjectId });
     closeModal();
     showToast('Milestone saved!');
     await fetchAllData();
@@ -929,7 +965,7 @@ async function saveResource(id) {
 
   try {
     if (id) await api.updateResource(id, { title, url, type, tags, description, content });
-    else await api.createResource({ title, url, type, tags, description, content, createdBy: 'Squad Lead' });
+    else await api.createResource({ title, url, type, tags, description, content, createdBy: 'Squad Lead', projectId: state.activeProjectId });
     closeModal();
     showToast('Resource saved successfully!');
     await fetchAllData();
@@ -947,7 +983,7 @@ async function saveTeamMember(id) {
 
   try {
     if (id) await api.updateTeam(id, { name, email, role });
-    else await api.createTeam({ name, email, role });
+    else await api.createTeam({ name, email, role, projectId: state.activeProjectId });
     closeModal();
     showToast('Squad member saved!');
     await fetchAllData();

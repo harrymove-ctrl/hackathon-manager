@@ -6,20 +6,23 @@ export const createTeamMemberSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().email(),
   role: z.string().default('member'),
+  projectId: z.string().uuid().optional().nullable(),
 });
 
 export const updateTeamMemberSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   email: z.string().email().optional(),
   role: z.string().optional(),
+  projectId: z.string().uuid().optional().nullable(),
 });
 
 export type CreateTeamMember = z.infer<typeof createTeamMemberSchema>;
 export type UpdateTeamMember = z.infer<typeof updateTeamMemberSchema>;
 
 export class TeamMemberService {
-  async findAll() {
+  async findAll(projectId?: string) {
     return prisma.teamMember.findMany({
+      where: projectId ? { projectId } : undefined,
       include: {
         tasks: {
           select: {

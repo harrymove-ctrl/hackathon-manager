@@ -8,6 +8,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Project {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  url         String?
+  startDate   DateTime?
+  endDate     DateTime?
+  status      ProjectStatus @default(ACTIVE)
+  tasks       Task[]
+  deadlines   Deadline[]
+  resources   Resource[]
+  teamMembers TeamMember[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
 // Team Member
 model TeamMember {
   id        String   @id @default(uuid())
@@ -15,6 +36,8 @@ model TeamMember {
   email     String   @unique
   role      String   @default("member")
   tasks     Task[]
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -37,6 +60,8 @@ model Resource {
   content     String?
   tags        String[]
   createdBy   String
+  projectId   String?
+  project     Project?     @relation(fields: [projectId], references: [id])
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -74,6 +99,8 @@ model Deadline {
   status      Status    @default(PENDING)
   assignedTo  String?
   tasks       Task[]
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -89,6 +116,8 @@ model Task {
   assignee    TeamMember? @relation(fields: [assigneeId], references: [id])
   deadlineId  String?
   deadline    Deadline?  @relation(fields: [deadlineId], references: [id])
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   completedAt DateTime?

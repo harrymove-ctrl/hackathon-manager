@@ -5,7 +5,8 @@ import { ValidationError } from '../utils/errors.js';
 export class DeadlineController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const deadlines = await deadlineService.findAll();
+      const projectId = req.query.projectId as string | undefined;
+      const deadlines = await deadlineService.findAll(projectId);
       res.json(deadlines);
     } catch (error) {
       next(error);

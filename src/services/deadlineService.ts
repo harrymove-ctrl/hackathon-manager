@@ -8,6 +8,7 @@ export const createDeadlineSchema = z.object({
   dueDate: z.string().datetime().transform(s => new Date(s)),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).default('MEDIUM'),
   assignedTo: z.string().optional().nullable(),
+  projectId: z.string().uuid().optional().nullable(),
 });
 
 export const updateDeadlineSchema = createDeadlineSchema.partial();
@@ -16,8 +17,9 @@ export type CreateDeadline = z.infer<typeof createDeadlineSchema>;
 export type UpdateDeadline = z.infer<typeof updateDeadlineSchema>;
 
 export class DeadlineService {
-  async findAll() {
+  async findAll(projectId?: string) {
     return prisma.deadline.findMany({
+      where: projectId ? { projectId } : undefined,
       orderBy: { dueDate: 'asc' },
     });
   }
